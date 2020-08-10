@@ -4,7 +4,6 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "license": "MIT",
-
     "authors": [
         {
             "name": "Dave Bray",
@@ -12,12 +11,22 @@
         }
     ],
     "require": {
+        "bravedave/dvc": "^2.0",
+        "bravedave/green": "dev-master",
+        "matthiasmullie/scrapbook": "^1.4"
     },
     "autoload": {
         "psr-4": {
-            "": "src/app/"
+            "": "application/app",
+            "c19\\": "c19/"
 
         }
+
+    },
+    "scripts": {
+        "post-update-cmd": [
+            "c19\\postUpdate::upgrade"
+        ]
 
     }
 

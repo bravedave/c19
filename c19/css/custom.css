@@ -1,0 +1,18 @@
+div[data-role="content-secondary"],
+div[data-role="main-content-wrapper"] {
+    height: calc( 100vh - 56px - 24px);
+
+}
+
+.nav.flex-column > .nav-item > .nav-link > .fa {
+	margin-left: -1.25rem; margin-right: 0.25rem; width: 1rem;
+
+}
+
+@media (min-width: 768px) {
+  .d-md-list-item {
+      display:list-item!important
+
+  }
+
+}

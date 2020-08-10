@@ -1,0 +1,108 @@
+<?php
+/*
+ * David Bray
+ * BrayWorth Pty Ltd
+ * e. david@brayworth.com.au
+ *
+ * MIT License
+ *
+*/
+
+namespace c19;
+
+use sys;
+use dvc;
+
+class config extends dvc\config {
+  const c19_db_version = 0.42;
+
+	const allow_password_recovery = true;
+  const use_inline_logon = true;
+
+	static $REQUIRE_AUTHORIZATION = false;
+	static $CLIENT_TITLE = 'Bilinga Attendance Tracker';
+	static $WEBNAME = 'Attendance Tracking';
+
+  static protected $_C19_VERSION = 0;
+
+	static function c19_checkdatabase() {
+		if ( self::c19_version() < self::c19_db_version) {
+			self::c19_version( self::c19_db_version);
+
+			$dao = new dao\dbinfo;
+			$dao->dump( $verbose = false);
+
+		}
+
+		// sys::logger( 'bro!');
+
+	}
+
+	static protected function c19_config() {
+		return implode( DIRECTORY_SEPARATOR, [
+            rtrim( self::dataPath(), '/ '),
+            'c19.json'
+
+        ]);
+
+	}
+
+	static protected function c19_version( $set = null) {
+		$ret = self::$_C19_VERSION;
+
+		if ( (float)$set) {
+			$config = self::c19_config();
+
+			$j = file_exists( $config) ?
+				json_decode( file_get_contents( $config)):
+				(object)[];
+
+			self::$_C19_VERSION = $j->c19_version = $set;
+
+			file_put_contents( $config, json_encode( $j, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+
+		}
+
+		return $ret;
+
+  }
+
+  static function c19_init() {
+		$_a = [
+			'dbCachePrefix' => self::$DB_CACHE_PREFIX,
+			'c19_version' => self::$_C19_VERSION,
+			'require_authorization' => false,
+
+		];
+
+		if ( file_exists( $config = self::c19_config())) {
+			$a = (object)array_merge( $_a, (array)json_decode( file_get_contents( $config)));
+
+			self::$DB_CACHE_PREFIX = (bool)$a->dbCachePrefix;
+			self::$_C19_VERSION = $a->c19_version;
+			self::$REQUIRE_AUTHORIZATION = (bool)$a->require_authorization;
+
+		}
+
+		if( extension_loaded('apcu') && ini_get('apc.enabled') && ( php_sapi_name() != 'cli' || ini_get('apc.enable_cli'))) {
+      //~ \sys::logger( 'APC enabled!');
+      if ( \class_exists('MatthiasMullie\Scrapbook\Adapters\Apc')) {
+        self::$DB_CACHE = 'APC';	// values = 'APC'
+        //~ self::$DB_CACHE_TTL = 40;
+        // self::$DB_CACHE_DEBUG = true;
+        self::$DB_CACHE_DEBUG_FLUSH = true;
+
+      }
+      else {
+        \sys::logger( sprintf('<%s> %s', 'please install cache', __METHOD__));
+        \sys::logger( sprintf('<%s> %s', 'composer require matthiasMullie/scrapbook', __METHOD__));
+
+      }
+
+		}
+
+	}
+
+}
+
+config::c19_init();
