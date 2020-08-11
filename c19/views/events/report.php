@@ -19,6 +19,7 @@ use strings;  ?>
 			<td class="text-center">#</td>
 			<td>Description</td>
 			<td>Duration</td>
+			<td class="text-center">Attendees</td>
 
 		</tr>
 
@@ -42,6 +43,7 @@ use strings;  ?>
         strings::asLocalDate( $dto->end, $time = true));
 
     }
+		printf( '<td class="text-center">%s</td>', $dto->tot);
 
 		print '</tr>';
 	}
@@ -49,7 +51,7 @@ use strings;  ?>
 
 	<tfoot class="d-print-none">
 		<tr>
-			<td colspan="3" class="text-right">
+			<td colspan="4" class="text-right">
 				<button type="button" class="btn btn-outline-secondary" id="<?= $addBtn = strings::rand() ?>"><i class="fa fa-plus"></i></a>
 
 			</td>

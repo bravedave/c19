@@ -20,19 +20,31 @@ class config extends dvc\config {
   const use_inline_logon = true;
 
 	static $REQUIRE_AUTHORIZATION = false;
-	static $CLIENT_TITLE = 'Bilinga Attendance Tracker';
-	static $WEBNAME = 'Attendance Tracking';
+  static $CLIENT_TITLE = 'Bilinga Check In';
 
+	static $WEBNAME = 'Attendance Checking';
+
+  static protected $_REGISTRATION_TTL = 2419200; // 28 * 24 * 60 * 60
+  static protected $_REGISTRATION_PURGE = 0;   // the last time the client info was purged
   static protected $_C19_VERSION = 0;
 
 	static function c19_checkdatabase() {
 		if ( self::c19_version() < self::c19_db_version) {
-			self::c19_version( self::c19_db_version);
 
-			$dao = new dao\dbinfo;
+      $dao = new dao\dbinfo;
 			$dao->dump( $verbose = false);
 
-		}
+			self::c19_version( self::c19_db_version);
+
+    }
+
+    if ( time() - self::c19_purged() > 3600) {
+    // if ( time() - self::c19_purged() > 30) {
+      $dao = new dao\registrations();
+      $dao->purge( self::$_REGISTRATION_TTL);
+      self::c19_purged( time());
+
+    }
 
 		// sys::logger( 'bro!');
 
@@ -46,6 +58,26 @@ class config extends dvc\config {
         ]);
 
 	}
+
+	static protected function c19_purged( $set = null) {
+		$ret = self::$_REGISTRATION_PURGE;
+
+		if ( (float)$set) {
+			$config = self::c19_config();
+
+			$j = file_exists( $config) ?
+				json_decode( file_get_contents( $config)):
+				(object)[];
+
+			self::$_REGISTRATION_PURGE = $j->registration_purge = $set;
+
+			file_put_contents( $config, json_encode( $j, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+
+		}
+
+		return $ret;
+
+  }
 
 	static protected function c19_version( $set = null) {
 		$ret = self::$_C19_VERSION;
@@ -71,6 +103,8 @@ class config extends dvc\config {
 		$_a = [
 			'dbCachePrefix' => self::$DB_CACHE_PREFIX,
 			'c19_version' => self::$_C19_VERSION,
+			'registration_ttl' => self::$_REGISTRATION_TTL,
+			'registration_purge' => self::$_REGISTRATION_PURGE,
 			'require_authorization' => false,
 
 		];
@@ -80,6 +114,8 @@ class config extends dvc\config {
 
 			self::$DB_CACHE_PREFIX = (bool)$a->dbCachePrefix;
 			self::$_C19_VERSION = $a->c19_version;
+			self::$_REGISTRATION_TTL = $a->registration_ttl;
+			self::$_REGISTRATION_PURGE = $a->registration_purge;
 			self::$REQUIRE_AUTHORIZATION = (bool)$a->require_authorization;
 
 		}

@@ -16,16 +16,35 @@ class events extends _dao {
 	protected $_db_name = 'events';
 	protected $template = '\c19\dao\dto\events';
 
-  public function getOpenEvents() {
+  public function getOpenEventsWithAttendance() {
     $sql = sprintf( 'SELECT
-        *
-      FROM
-        `events`
-      WHERE
-        `open` = 1
+        `events`.*,
+        regs.tot
+      FROM `events`
+        LEFT JOIN
+        (SELECT
+          `event`,
+          count(*) tot
+        FROM `registrations`
+        GROUP BY `event`) regs
+          ON regs.`event` = `events`.`id`
+      WHERE `open` = 1
         OR (`start` <= "%s" AND `end` >= "%s")',
-      date( "Y-m-d H:i:s", time()),
-      date( "Y-m-d H:i:s", time())
+      \db::dbTimeStamp(),
+      \db::dbTimeStamp()
+
+    );
+
+    return $this->Result( $sql);
+
+  }
+
+  public function getOpenEvents() {
+    $sql = sprintf( 'SELECT * FROM `events`
+      WHERE `open` = 1
+        OR (`start` <= "%s" AND `end` >= "%s")',
+      \db::dbTimeStamp(),
+      \db::dbTimeStamp()
 
     );
 
@@ -39,7 +58,9 @@ class events extends _dao {
       FROM
         `registrations`
       WHERE
-        `event` = %d',
+        `event` = %d
+      ORDER BY
+        `created` DESC',
       $id);
 
     return $this->Result( $sql);

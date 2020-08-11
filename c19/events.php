@@ -71,7 +71,7 @@ class events extends controller {
 	protected function _index() {
 		$dao = new dao\events;
 		$this->data = (object)[
-			'dataset' => $dao->getAll()
+			'dataset' => $dao->getOpenEventsWithAttendance()
 
     ];
 
@@ -122,14 +122,27 @@ class events extends controller {
 
   }
 
+	function attendees( $id = 0) {
+    if ( $id = (int)$id) {
+      $dao = new dao\events;
+      $this->data = (object)[
+        'registrations' => $dao->getRegistrationsForEvent( $id)
+
+      ];
+
+      $this->load('events/registered-attendees');
+
+		} else { $this->load('events/not-found'); }
+
+  }
+
 	function registrations( $id = 0) {
 
     if ( $id = (int)$id) {
       $dao = new dao\events;
       $this->data = (object)[
         'title' => $this->title = 'Registrations',
-        'event' => $dao->getByID( $id),
-        'registrations' => $dao->getRegistrationsForEvent( $id)
+        'event' => $dao->getByID( $id)
 
       ];
 
@@ -139,27 +152,21 @@ class events extends controller {
 
       ];
 
-      $this->render(
-        [
-          'title' => $this->title = $this->label,
-          'primary' => 'events/registrations',
-          'secondary' => $secondary,
+      $this->render([
+        'title' => $this->title = $this->label,
+        'primary' => 'events/registrations',
+        'secondary' => $secondary,
 
-        ]
-
-      );
+      ]);
 
 		}
 		else {
-      $this->render(
-        [
-          'title' => $this->title = $this->label,
-          'primary' => 'events/not-found',
-          'secondary' => $secondary,
+      $this->render([
+        'title' => $this->title = $this->label,
+        'primary' => 'events/not-found',
+        'secondary' => $secondary,
 
-        ]
-
-      );
+      ]);
 
 		}
 

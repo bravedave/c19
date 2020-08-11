@@ -64,7 +64,7 @@ use strings; ?>
 
   <div class="form-group row">
     <div class="offset-lg-4 col-lg-4">
-      <label for="<?php $_uid = strings::rand() ?>">Size of Party</label>
+      <label for="<?php $_uid = strings::rand() ?>">How many in your group</label>
       <input type="number" class="form-control" name="party" placeholder="name" value="1" required
         id="<?= $_uid ?>">
 
@@ -120,7 +120,7 @@ use strings; ?>
 
   <div class="form-group row">
     <div class="offset-lg-4 col-lg-4 text-right">
-      <button class="btn btn-primary" type="submit">register</button>
+      <button class="btn btn-primary" style="background-color: #3F3F95" type="submit">Check In</button>
 
     </div>
 

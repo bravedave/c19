@@ -10,7 +10,9 @@
 
 namespace c19;
 
-use strings;  ?>
+use strings;
+
+$dto = $this->data->event;  ?>
 
 <h1 class="d-none d-print-block"><?= $this->title ?></h1>
 <h5>Event</h5>
@@ -26,7 +28,6 @@ use strings;  ?>
 
 	<tbody>
 	<?php
-    $dto = $this->data->event;
 		printf( '<td>%s</td>', $dto->description);
 		if ( $dto->open) {
       printf( '<td>%s</td>', 'open event');
@@ -45,52 +46,37 @@ use strings;  ?>
 
 </table>
 
-<h5>Attendees</h5>
-<table class="table table-sm" id="<?= $_table = strings::rand() ?>">
-	<thead class="small">
-		<tr>
-			<td class="text-center">#</td>
-			<td>Time</td>
-			<td>Name</td>
-			<td class="text-center">Party</td>
-			<td>Mobile</td>
-			<td>Address</td>
-
-		</tr>
-
-	</thead>
-
-	<tbody>
-	<?php
-	while ( $dto = $this->data->registrations->dto()) {
-		printf( '<tr data-id="%d">', $dto->id);
-
-		print '<td class="small text-center" line-number>&nbsp;</td>';
-
-		printf( '<td>%s</td>', strings::asLocalDate( $dto->created, $time = true));
-		printf( '<td>%s</td>', $dto->name);
-		printf( '<td class="text-center">%s</td>', $dto->party);
-		printf( '<td>%s</td>', $dto->phone);
-		printf( '<td>%s</td>', $dto->address);
-
-    print '</tr>';
-
-	}
-	?></tbody>
-
-</table>
+<h5 id="<?= $_registrations = strings::rand() ?>heading" class="d-flex">
+  Attendees
+  <div class="spinner-grow spinner-grow-sm ml-auto" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</h5>
+<div id="<?= $_registrations ?>"></div>
 
 <script>
 $(document).ready( () => {
-	$('#<?= $_table ?>')
-	.on('update-row-numbers', function(e) {
-		$('> tbody > tr:not(.d-none) >td[line-number]', this).each( ( i, e) => {
-			$(e).html( i+1);
+  ( _ => {
+    $('#<?= $_registrations ?>').on('get-attendees', function(e) {
+      e.stopPropagation();
 
-		});
+      $('.spinner-grow', '#<?= $_registrations ?>heading').removeClass('d-none');
+      let url = _.url( '<?= $this->route ?>/attendees/<?= $dto->id ?>');
+      // console.log( url);
 
-	})
-	.trigger('update-row-numbers');
+      $(this).load( url, data => {
+        setTimeout(() => {
+          $('#<?= $_registrations ?>').trigger('get-attendees');
+        }, 15000);
+
+        $('.spinner-grow', '#<?= $_registrations ?>heading').addClass('d-none');
+
+      });
+
+    })
+    .trigger('get-attendees');
+
+  }) (_brayworth_);
 
 });
 </script>

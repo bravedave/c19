@@ -76,7 +76,11 @@ class controller extends dvc\Controller {
   protected function _index() {
       $render = [
           'primary' => 'home',
-          'secondary' => ['index']
+          'secondary' => [
+            'index',
+            'qr-code'
+
+          ]
 
       ];
 
@@ -128,11 +132,11 @@ class controller extends dvc\Controller {
 
   }
 
-  function __construct($rootPath) {
+  public function __construct($rootPath) {
       // \sys::logger( sprintf('<%s> %s', get_class($this), __METHOD__));
       if ( \in_array( get_class($this),[
           'assets',
-          'c19\home',
+          'home',
           'c19\recover'
       ])) {
           $this->RequireValidation = false;
@@ -164,7 +168,7 @@ class controller extends dvc\Controller {
 
   }
 
-  function image($img) {
+  public function image($img) {
     $img = preg_replace('@[^a-z0-9_]@', '', $img);
     if ($img) {
       $path = implode(DIRECTORY_SEPARATOR, [
@@ -176,6 +180,36 @@ class controller extends dvc\Controller {
 
       if (\file_exists($path . '.jpg')) sys::serve($path . '.jpg');
       elseif (\file_exists($path . '.png')) sys::serve($path . '.png');
+
+    }
+
+  }
+
+  public function qrcode() {
+    $qrCode = implode( DIRECTORY_SEPARATOR, [
+      config::dataPath(),
+      'qr-code.svg'
+
+    ]);
+
+    if ( !\file_exists( $qrCode)) {
+      $renderer = new \BaconQrCode\Renderer\ImageRenderer(
+          new \BaconQrCode\Renderer\RendererStyle\RendererStyle(800),
+          new \BaconQrCode\Renderer\Image\ImagickImageBackEnd()
+      );
+
+      $renderer = new \BaconQrCode\Renderer\ImageRenderer(
+          new \BaconQrCode\Renderer\RendererStyle\RendererStyle(800),
+          new \BaconQrCode\Renderer\Image\SvgImageBackEnd()
+      );
+
+      $writer = new \BaconQrCode\Writer($renderer);
+      $writer->writeFile( strings::url('', $protocol = true), $qrCode);
+
+    }
+
+    if ( \file_exists( $qrCode)) {
+      sys::serve( $qrCode);
 
     }
 
