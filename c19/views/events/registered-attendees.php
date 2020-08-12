@@ -18,7 +18,8 @@ use strings;  ?>
 			<td class="text-center" line-number>#</td>
 			<td>Time</td>
 			<td>Name</td>
-			<td class="text-center">Party</td>
+			<td>Parent</td>
+			<td class="text-center">Family</td>
 			<td>Mobile</td>
 			<td>Address</td>
 
@@ -37,7 +38,8 @@ use strings;  ?>
 
 		printf( '<td>%s</td>', strings::asLocalDate( $dto->created, $time = true));
 		printf( '<td>%s</td>', $dto->name);
-		printf( '<td class="text-center">%s</td>', $dto->party);
+		printf( '<td>%s</td>', $dto->parent ? $dto->parent_name : '&nbsp;');
+		printf( '<td class="text-center">%s</td>', $dto->parent ? '&nbsp;' : $dto->party);
 		printf( '<td>%s</td>', $dto->phone);
 		printf( '<td>%s</td>', $dto->address);
 
@@ -48,7 +50,7 @@ use strings;  ?>
 
   <tfoot>
     <tr>
-      <td colspan="3">&nbsp;</td>
+      <td class="text-muted font-italic small" colspan="4"><?= sprintf( 'updated : %s', date( 'c')) ?></td>
       <td class="text-center"><?= $parties ?></td>
       <td colspan="2">&nbsp;</td>
 
@@ -73,6 +75,26 @@ $(document).ready( () => {
 
 	})
 	.trigger('update-row-numbers');
+
+  $('> tbody > tr', '#<?= $_table ?>').each( ( i, tr) => {
+    let _tr = $(tr);
+
+    _tr
+    .on('edit', function(e) {
+      let _tr = $(this);
+      let _data = _tr.data();
+
+      $(document).trigger( 'edit-attendee', _data.id);
+
+    })
+    .on( 'click', function( e) {
+      e.stopPropagation();e.preventDefault();
+
+      $(this).trigger('edit');
+
+    });
+
+  });
 
 });
 </script>

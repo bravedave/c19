@@ -62,7 +62,20 @@ class client extends controller {
       ];
 
       $dao = new dao\registrations;
-      $dao->Insert( $a);
+      $id = $dao->Insert( $a);
+
+      if ( $family = $this->getPost('family')) {
+
+        $a['parent'] = $id;
+        $family = (array)$family;
+        foreach ($family as $kid) {
+          $a['name'] = (string)$kid;
+          $dao->Insert( $a);
+
+        }
+
+      }
+
       Json::ack( $action);
 
     }
@@ -84,11 +97,20 @@ class client extends controller {
         __DIR__,
         'views',
         'navbar-client'
-      ])
+      ]),
 
     ], $params);
 
-    $params['css'][] = sprintf('<link type="text/css" rel="stylesheet" media="all" href="%s" />', strings::url('/c19css'));
+    $params['meta'][] = '<meta name="apple-mobile-web-app-capable" content="yes">';
+    $params['css'][] = sprintf('<link type="text/css" rel="stylesheet" media="all" href="%s">', strings::url('/c19css'));
+    $params['css'][] = sprintf('<link rel="apple-touch-icon" sizes="72x72" href="%s">', strings::url('/image/apple-touch-icon-72x72.png'));
+    $params['css'][] = sprintf('<link rel="apple-touch-icon" sizes="114x114" href="%s">', strings::url('/image/apple-touch-icon-114x114.png'));
+    $params['css'][] = sprintf('<link rel="apple-touch-icon" href="%s">', strings::url('/image/apple-touch-icon-57x57.png'));
+    $params['css'][] = sprintf('<link rel="apple-touch-startup-image" href="%s">', strings::url('/image/splash-startup.png'));
+
+
+
+
 
     parent::render($params);
 

@@ -17,6 +17,7 @@ $dbc->defineField( 'name', 'varchar', 100);
 $dbc->defineField( 'party', 'varchar');
 $dbc->defineField( 'phone', 'varchar');
 $dbc->defineField( 'address', 'varchar', 100);
+$dbc->defineField( 'parent', 'bigint');
 $dbc->defineField( 'created', 'datetime');
 
 $dbc->check();

@@ -1,6 +1,6 @@
 div[data-role="content-secondary"],
 div[data-role="main-content-wrapper"] {
-    height: calc( 100vh - 56px - 24px);
+  height: calc( 100vh - 56px - 24px);
 
 }
 
@@ -11,8 +11,18 @@ div[data-role="main-content-wrapper"] {
 
 @media (min-width: 768px) {
   .d-md-list-item {
-      display:list-item!important
+    display:list-item!important
 
   }
 
+}
+
+.btn-bilinga {
+  color: #fff;
+  background-color: #3F3F95;
+  border-color: #3F3F95
+}
+
+.bg-bilinga {
+  background-color: #3F3F95;
 }

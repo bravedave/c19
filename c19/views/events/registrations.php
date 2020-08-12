@@ -67,7 +67,7 @@ $(document).ready( () => {
       $(this).load( url, data => {
         setTimeout(() => {
           $('#<?= $_registrations ?>').trigger('get-attendees');
-        }, 15000);
+        }, 10000);
 
         $('.spinner-grow', '#<?= $_registrations ?>heading').addClass('d-none');
 
@@ -75,6 +75,12 @@ $(document).ready( () => {
 
     })
     .trigger('get-attendees');
+
+    $(document).on( 'edit-attendee', ( e, id ) => {
+      _.get.modal( _.url( '<?= $this->route ?>/editRegistration/' + id))
+        .then( modal => modal.on('success', e => $('#<?= $_registrations ?>').trigger('get-attendees')));
+
+    });
 
   }) (_brayworth_);
 

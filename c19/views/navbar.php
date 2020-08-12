@@ -29,6 +29,14 @@ use dvc;    ?>
 
       </li>
 
+      <li class="nav-item d-none d-md-list-item">
+        <a class="nav-link" href="<?= strings::url() ?>" target="_blank">
+          <?= dvc\icon::get( dvc\icon::app ) ?>
+
+        </a>
+
+      </li>
+
       <li class="nav-item d-md-none">
           <a class="nav-link" href="<?= strings::url( 'events') ?>">events</a>
 

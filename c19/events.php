@@ -61,6 +61,21 @@ class events extends controller {
 			}
 
 		}
+		elseif ( 'update-registration' == $action) {
+			$a = [
+				'name' => $this->getPost('name'),
+
+			];
+
+			if ( ( $id = (int)$this->getPost('id')) > 0 ) {
+				$dao = new dao\registrations;
+				$dao->UpdateByID( $a, $id);
+				Json::ack( $action)
+					->add( 'id', $id);
+
+      } else { Json::nak( $action); }
+
+		}
 		else {
 			parent::postHandler();
 
@@ -93,7 +108,21 @@ class events extends controller {
 
 	}
 
-	function edit( $id = 0) {
+	public function attendees( $id = 0) {
+    if ( $id = (int)$id) {
+      $dao = new dao\events;
+      $this->data = (object)[
+        'registrations' => $dao->getRegistrationsForEvent( $id)
+
+      ];
+
+      $this->load('events/registered-attendees');
+
+		} else { $this->load('events/not-found'); }
+
+  }
+
+	public function edit( $id = 0) {
 		$this->data = (object)[
 			'title' => $this->title = 'Add Event',
 			'dto' => new dao\dto\events
@@ -122,21 +151,26 @@ class events extends controller {
 
   }
 
-	function attendees( $id = 0) {
+  public function editRegistration( $id) {
     if ( $id = (int)$id) {
-      $dao = new dao\events;
-      $this->data = (object)[
-        'registrations' => $dao->getRegistrationsForEvent( $id)
+      $dao = new dao\registrations;
+      if ( $dto = $dao->getByID( $id)) {
+        $this->title = 'Edit Registration';
 
-      ];
+        $this->data = (object)[
+          'dto' => $dto
 
-      $this->load('events/registered-attendees');
+        ];
 
-		} else { $this->load('events/not-found'); }
+        $this->load('events/edit-registration');
+
+      }
+
+    }
 
   }
 
-	function registrations( $id = 0) {
+	public function registrations( $id = 0) {
 
     if ( $id = (int)$id) {
       $dao = new dao\events;

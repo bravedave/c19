@@ -54,13 +54,15 @@ class events extends _dao {
 
   public function getRegistrationsForEvent( $id) {
     $sql = sprintf( 'SELECT
-        *
+        r.*,
+        p.name `parent_name`
       FROM
-        `registrations`
+        `registrations` r
+        LEFT JOIN `registrations` p ON p.`id` = r.`parent`
       WHERE
-        `event` = %d
+        r.`event` = %d
       ORDER BY
-        `created` DESC',
+        r.`created` DESC',
       $id);
 
     return $this->Result( $sql);

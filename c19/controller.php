@@ -169,8 +169,13 @@ class controller extends dvc\Controller {
   }
 
   public function image($img) {
-    $img = preg_replace('@[^a-z0-9_]@', '', $img);
-    if ($img) {
+    if ( \in_array( $img, [
+      'apple-touch-icon-57x57.png',
+      'apple-touch-icon-114x114.png',
+      'apple-touch-icon-72x72.png',
+      'splash-startup.png'
+      ])) {
+
       $path = implode(DIRECTORY_SEPARATOR, [
           __DIR__,
           'images',
@@ -178,8 +183,23 @@ class controller extends dvc\Controller {
 
       ]);
 
-      if (\file_exists($path . '.jpg')) sys::serve($path . '.jpg');
-      elseif (\file_exists($path . '.png')) sys::serve($path . '.png');
+      if (\file_exists($path)) sys::serve($path);
+
+    }
+    else {
+      $img = preg_replace('@[^a-z0-9_]@', '', $img);
+      if ($img) {
+        $path = implode(DIRECTORY_SEPARATOR, [
+            __DIR__,
+            'images',
+            $img
+
+        ]);
+
+        if (\file_exists($path . '.jpg')) sys::serve($path . '.jpg');
+        elseif (\file_exists($path . '.png')) sys::serve($path . '.png');
+
+      }
 
     }
 
@@ -193,10 +213,10 @@ class controller extends dvc\Controller {
     ]);
 
     if ( !\file_exists( $qrCode)) {
-      $renderer = new \BaconQrCode\Renderer\ImageRenderer(
-          new \BaconQrCode\Renderer\RendererStyle\RendererStyle(800),
-          new \BaconQrCode\Renderer\Image\ImagickImageBackEnd()
-      );
+      // $renderer = new \BaconQrCode\Renderer\ImageRenderer(
+      //     new \BaconQrCode\Renderer\RendererStyle\RendererStyle(800),
+      //     new \BaconQrCode\Renderer\Image\ImagickImageBackEnd()
+      // );
 
       $renderer = new \BaconQrCode\Renderer\ImageRenderer(
           new \BaconQrCode\Renderer\RendererStyle\RendererStyle(800),
