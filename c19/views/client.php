@@ -229,6 +229,10 @@ $(document).ready( () => {
         e.stopPropagation();e.preventDefault();
         $(this).closest('.row').remove();
 
+        let i = Number( $('#<?= $_party ?>').val());
+        $('#<?= $_party ?>').val(i-1);
+        $('#<?= $_party ?>').trigger('change');
+
       })
 
     }
