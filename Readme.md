@@ -15,7 +15,6 @@ cd c19
 umask 022
 git pull
 git fetch -p
-umask 000
 composer u
 ```
 
@@ -26,4 +25,8 @@ composer u
    3. re-run update ```composer u```
 
 4. Check the ownership on the data folder (application/data) and it's contents
-   reflects access from the webserver - perhaps ```chmod -R g+w,o+w application/data/*```
+   reflects access from the webserver - perhaps
+```
+chmod -R g+w,o+w application/data/*
+chown -R apache application/data
+```

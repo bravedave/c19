@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "bravedave/dvc": "dev-master",
+        "bravedave/dvc": "^2.0",
         "bravedave/green": "dev-master",
         "matthiasmullie/scrapbook": "^1.4",
         "bacon/bacon-qr-code": "^2.0"
