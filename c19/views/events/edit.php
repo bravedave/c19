@@ -61,7 +61,11 @@ $dto = $this->data->dto;    ?>
                           <div class="col-md-6">
                             <label for="<?= $uid = strings::rand() ?>" class="my-0">Start</label>
                             <input class="form-control" type="datetime-local" name="start" required
-                                value="<?= $dto->start ?>"
+                                value="<?php
+                                  if ( ( $_t = strtotime( $dto->start)) > 0) {
+                                    print date( 'Y-m-d\TH:i', $_t);
+
+                                  } ?>"
                                 id="<?= $uid ?>" />
 
                           </div>
@@ -69,7 +73,11 @@ $dto = $this->data->dto;    ?>
                           <div class="col-md-6 mt-3 mt-md-0">
                             <label for="<?= $uid = strings::rand() ?>" class="my-0">End</label>
                             <input class="form-control" type="datetime-local" name="end" required
-                                value="<?= $dto->end ?>"
+                                value="<?php
+                                  if ( ( $_t = strtotime( $dto->end)) > 0) {
+                                    print date( 'Y-m-d\TH:i', $_t);
+
+                                  } ?>"
                                 id="<?= $uid ?>" />
 
                           </div>

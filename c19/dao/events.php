@@ -28,12 +28,13 @@ class events extends _dao {
         FROM `registrations`
         GROUP BY `event`) regs
           ON regs.`event` = `events`.`id`
-      WHERE `open` = 1
-        OR (`start` <= "%s" AND `end` >= "%s")',
+      ORDER BY `id` DESC',
       \db::dbTimeStamp(),
       \db::dbTimeStamp()
 
     );
+
+    // \sys::logSQL( $sql);
 
     return $this->Result( $sql);
 
@@ -42,11 +43,13 @@ class events extends _dao {
   public function getOpenEvents() {
     $sql = sprintf( 'SELECT * FROM `events`
       WHERE `open` = 1
-        OR (`start` <= "%s" AND `end` >= "%s")',
+        OR (`start` <= "%s" AND `end` >= "%s")
+      ORDER BY `description`',
       \db::dbTimeStamp(),
       \db::dbTimeStamp()
 
     );
+    \sys::logSQL( $sql);
 
     return $this->Result( $sql);
 

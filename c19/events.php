@@ -34,11 +34,17 @@ class events extends controller {
 			$a = [
 				'updated' => \db::dbTimeStamp(),
 				'description' => $this->getPost('description'),
-				'open' => (int)$this->getPost('open'),
-				'start' => $this->getPost('start'),
-				'end' => $this->getPost('end'),
+        'open' => (int)$this->getPost('open'),
+        'start' => '',
+        'end' => '',
 
-			];
+      ];
+
+      if ( !$a['open']) {
+        $a['start'] = date( 'Y-m-d H:i:s', strtotime( $this->getPost('start')));
+        $a['end'] = date( 'Y-m-d H:i:s', strtotime($this->getPost('end')));
+
+      }
 
 			if ( ( $id = (int)$this->getPost('id')) > 0 ) {
 				$dao = new dao\events;
