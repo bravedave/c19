@@ -15,6 +15,7 @@ cd c19
 umask 022
 git pull
 git fetch -p
+umask 002
 composer u
 ```
 
@@ -22,3 +23,6 @@ composer u
    1. mv application/data/defaults-sample.json application/data/defaults.json
    2. review application/data/defaults.json and adjust for your requirements
    3. re-run update ```composer u```
+
+4. Check the ownership on the data folder reflects access from the webserver
+   * chmod -R g+w,o+w application/data/*

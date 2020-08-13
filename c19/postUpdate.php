@@ -16,6 +16,7 @@ use dvc\service;
 
 class postUpdate extends service {
     protected function _upgrade() {
+        umask( 002);
         config::route_register( 'users', 'green\\users\\controller');
 
         \green\users\config::green_users_checkdatabase();
