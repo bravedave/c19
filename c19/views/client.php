@@ -15,6 +15,8 @@ use strings; ?>
 
 <form id="<?= $_form = strings::rand() ?>">
   <input type="hidden" name="action" value="register">
+  <input type="hidden" name="party" value="1" id="<?= $_party = strings::rand() ?>">
+
   <?php if ( count( $this->data->events) > 1) { ?>
     <div class="form-group row">
       <div class="offset-lg-4 col-lg-4">
@@ -117,11 +119,9 @@ use strings; ?>
 
   </div>
 
-  <input type="hidden" name="party" value="1" id="<?= $_party = strings::rand() ?>">
-
-  <div class="row">
+  <div class="row"><!-- Family Controls Policy -->
     <div class="offset-lg-4 col-lg-4">
-      <label class="d-none" id="<?= $_party ?>label">Your Family</label>
+      <label id="<?= $_party ?>label">Your Family</label>
       <div id="<?= $_party ?>family"></div>
 
       <div class="row">
@@ -156,9 +156,9 @@ use strings; ?>
 
   </div>
 
-  <div class="form-group row">
+  <div class="form-group row"><!-- Privacy Policy -->
     <div class="offset-lg-4 col-lg-4 text-muted small">
-      <h6>Privacy Polciy</h6>
+      <h6>Privacy Policy</h6>
 
       <p>Data is kept in accordance with Government Requirements, namely
         <ul>
@@ -187,7 +187,10 @@ $(document).ready( () => {
     let _me = $(this);
     // console.log( _me.val());
     if ( 'yes' == _me.val()) {
-      $('#<?= $_party ?>').val(2).trigger( 'change');
+      let _party = $('#<?= $_party ?>')
+      let i = Number( _party.val());
+      if ( i < 1) _party.val(2);
+      _party.trigger( 'change');
 
     }
     else {
@@ -202,6 +205,7 @@ $(document).ready( () => {
 
     if ( i < 1) return; // that's invalid anyway
 
+    // console.log('Party', i);
     let familyContainer = $('#<?= $_party ?>family');
 
     let _kids = $('.row', familyContainer);
@@ -232,6 +236,7 @@ $(document).ready( () => {
         let i = Number( $('#<?= $_party ?>').val());
         $('#<?= $_party ?>').val(i-1);
         $('#<?= $_party ?>').trigger('change');
+        // console.log( 'party - trigger - delete')
 
       })
 
@@ -248,15 +253,13 @@ $(document).ready( () => {
 
   });
 
-  // $('#<?= $_party ?>').trigger('change');
-  $('input[name="family-group"]:checked', '#<?= $_form ?>').trigger( 'change');
-
-  $('#<?= $_party ?>btn').on( 'click', function( e) {
+  $('#<?= $_party ?>btn').on( 'click', function( e) { // add a new member to the party
     e.stopPropagation();e.preventDefault();
 
     let i = Number( $('#<?= $_party ?>').val());
     $('#<?= $_party ?>').val(i+1);
     $('#<?= $_party ?>').trigger('change');
+    // console.log( 'party - trigger - add')
 
   });
 
@@ -330,13 +333,8 @@ $(document).ready( () => {
       $('input[name="address"]', '#<?= $_form ?>').val( _me.address);
       $('input[name="remember"]', '#<?= $_form ?>').prop( 'checked', true);
 
-      $('input[name="party"]', '#<?= $_form ?>').trigger('change');
-      if ( Number( _me.party) > 1) {
-        $('input[name="family-group"][value="yes"]', '#<?= $_form ?>')
-        .prop( 'checked', true)
-        .trigger( 'change');
-
-      }
+      // set form state
+      $('input[name="family-group"][value="yes"]', '#<?= $_form ?>').prop( 'checked', true).trigger( 'change');
 
       if ( !!_me.family) {
         $('input[name="family\[\]"]').each( (i, el) => {
@@ -348,6 +346,11 @@ $(document).ready( () => {
         });
 
       }
+
+    }
+    else {
+      // set form state
+      $('input[name="family-group"]:checked', '#<?= $_form ?>').trigger( 'change');
 
     }
 
