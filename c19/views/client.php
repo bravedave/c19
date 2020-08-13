@@ -189,7 +189,7 @@ $(document).ready( () => {
     if ( 'yes' == _me.val()) {
       let _party = $('#<?= $_party ?>')
       let i = Number( _party.val());
-      if ( i < 1) _party.val(2);
+      if ( i < 2) _party.val(2);
       _party.trigger( 'change');
 
     }
