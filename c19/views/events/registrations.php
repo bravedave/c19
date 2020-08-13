@@ -15,11 +15,10 @@ use strings;
 $dto = $this->data->event;  ?>
 
 <h1 class="d-none d-print-block"><?= $this->title ?></h1>
-<h5>Event</h5>
 <table class="table table-sm">
 	<thead class="small">
 		<tr>
-			<td>Description</td>
+			<td class="h5 m-0">Event</td>
 			<td>Duration</td>
 
 		</tr>
