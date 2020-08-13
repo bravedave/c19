@@ -337,8 +337,10 @@ $(document).ready( () => {
       $('input[name="family-group"][value="yes"]', '#<?= $_form ?>').prop( 'checked', true).trigger( 'change');
 
       if ( !!_me.family) {
+        console.log( _me.family);
         $('input[name="family\[\]"]').each( (i, el) => {
           if ( !!_me.family[i]) {
+            console.log( _me.family[i]);
             $(el).val( _me.family[i]);
 
           }
