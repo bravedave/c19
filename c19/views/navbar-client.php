@@ -20,4 +20,16 @@ use dvc;    ?>
       style="margin: -10px 0;" />
     <?= $this->data->title ?>
   </a>
+  <button tyle="button" class="btn btn-bilinga" name="refresh" id="<?= $_uid = strings::rand() ?>"><i class="fa fa-refresh"></i></button>
 </nav>
+<script>
+$(document).ready( () => {
+  $('#<?= $_uid ?>').on( 'click', function( e) {
+    e.stopPropagation();e.preventDefault();
+
+    window.location.reload();
+
+  })
+
+});
+</script>
