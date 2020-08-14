@@ -1,4 +1,4 @@
-## C19 - Simple Vistation Tracking
+## C19 - Simple Visitation Tracking
 
 With Covid19 it's necessary to record who is attending events.
 
