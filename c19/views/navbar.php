@@ -53,7 +53,7 @@ use dvc;    ?>
       </div>
 
       <li class="nav-item d-none d-md-list-item">
-        <a class="nav-link" href="https://github.com/bravedave/">
+        <a class="nav-link" href="https://github.com/bravedave/c19">
           <?= dvc\icon::get( dvc\icon::github ) ?>
 
         </a>

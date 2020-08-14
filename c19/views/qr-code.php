@@ -10,12 +10,17 @@
 */  ?>
 
 <div class="row mt-4">
-  <div class="col">
-    <a href="<?= strings::url( 'qrcode') ?>" target="_blank">
+  <div class="col text-center">
+    <a href="<?= strings::url( 'admin/qrcode/v') ?>" target="_blank">
       <img class="img-fluid" src="<?= strings::url( $this->route . '/qrcode') ?>" >
 
     </a>
 
   </div>
+
+</div>
+
+<div class="row">
+  <div class="col text-center text-truncate"><?= strings::url('', $protocol = true) ?></div>
 
 </div>

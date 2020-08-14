@@ -15,6 +15,7 @@ use sys;
 use dvc;
 use dvc\session;
 use dvc\Response;
+use BaconQrCode as QrCode;
 
 class controller extends dvc\Controller {
   protected function _authorize() {
@@ -205,31 +206,38 @@ class controller extends dvc\Controller {
 
   }
 
-  public function qrcode() {
-    $qrCode = implode( DIRECTORY_SEPARATOR, [
-      config::dataPath(),
-      'qr-code.svg'
-
-    ]);
-
-    if ( !\file_exists( $qrCode)) {
-      // $renderer = new \BaconQrCode\Renderer\ImageRenderer(
-      //     new \BaconQrCode\Renderer\RendererStyle\RendererStyle(800),
-      //     new \BaconQrCode\Renderer\Image\ImagickImageBackEnd()
-      // );
-
-      $renderer = new \BaconQrCode\Renderer\ImageRenderer(
-          new \BaconQrCode\Renderer\RendererStyle\RendererStyle(800),
-          new \BaconQrCode\Renderer\Image\SvgImageBackEnd()
-      );
-
-      $writer = new \BaconQrCode\Writer($renderer);
-      $writer->writeFile( strings::url('', $protocol = true), $qrCode);
+  public function qrcode( $v = '') {
+    if ( 'v' == $v) {
+      $this->render([ 'content' => 'qr-code' ]);
 
     }
+    else {
+      $qrCode = implode( DIRECTORY_SEPARATOR, [
+        config::dataPath(),
+        'qr-code.svg'
 
-    if ( \file_exists( $qrCode)) {
-      sys::serve( $qrCode);
+      ]);
+
+      if ( !\file_exists( $qrCode)) {
+        // $renderer = new \BaconQrCode\Renderer\ImageRenderer(
+        //     new \BaconQrCode\Renderer\RendererStyle\RendererStyle(800),
+        //     new \BaconQrCode\Renderer\Image\ImagickImageBackEnd()
+        // );
+
+        $renderer = new QrCode\Renderer\ImageRenderer(
+            new QrCode\Renderer\RendererStyle\RendererStyle(800),
+            new QrCode\Renderer\Image\SvgImageBackEnd()
+        );
+
+        $writer = new QrCode\Writer( $renderer);
+        $writer->writeFile( strings::url('', $protocol = true), $qrCode);
+
+      }
+
+      if ( \file_exists( $qrCode)) {
+        sys::serve( $qrCode);
+
+      }
 
     }
 
