@@ -21,6 +21,6 @@
 </div>
 
 <div class="row">
-  <div class="col text-center text-truncate"><?= strings::url('', $protocol = true) ?></div>
+  <div class="col text-center text-truncate h2"><?= strings::url('', $protocol = true) ?></div>
 
 </div>

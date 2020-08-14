@@ -225,7 +225,7 @@ class controller extends dvc\Controller {
         // );
 
         $renderer = new QrCode\Renderer\ImageRenderer(
-            new QrCode\Renderer\RendererStyle\RendererStyle(800),
+            new QrCode\Renderer\RendererStyle\RendererStyle(800, $margin = 0),
             new QrCode\Renderer\Image\SvgImageBackEnd()
         );
 
