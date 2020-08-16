@@ -41,6 +41,10 @@ class config extends dvc\config {
     // if ( time() - self::c19_purged() > 30) {
       $dao = new dao\registrations();
       $dao->purge( self::$_REGISTRATION_TTL);
+
+      $dao = new dao\events();
+      $dao->purge( self::$_REGISTRATION_TTL);
+
       self::c19_purged( time());
 
     }
