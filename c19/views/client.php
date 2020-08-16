@@ -162,7 +162,7 @@ use strings; ?>
 
       <p>Data is kept in accordance with Government Requirements, namely
         <ul>
-          <li>for 28 days, after which it is automatically deleted</li>
+          <li>for <?= config::c19_registration_ttl_days() ?> days, after which it is automatically deleted</li>
 
         </ul>
 

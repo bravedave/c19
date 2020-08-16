@@ -101,7 +101,7 @@ class client extends controller {
 
     ], $params);
 
-    $params['meta'][] = '<meta name="apple-mobile-web-app-capable" content="yes">';
+    // $params['meta'][] = '<meta name="apple-mobile-web-app-capable" content="yes">';
     $params['css'][] = sprintf('<link type="text/css" rel="stylesheet" media="all" href="%s">', strings::url('/c19css'));
     $params['css'][] = sprintf('<link rel="apple-touch-icon" sizes="72x72" href="%s">', strings::url('/image/apple-touch-icon-72x72.png'));
     $params['css'][] = sprintf('<link rel="apple-touch-icon" sizes="114x114" href="%s">', strings::url('/image/apple-touch-icon-114x114.png'));
