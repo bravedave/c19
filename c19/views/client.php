@@ -136,11 +136,17 @@ use strings; ?>
 
   </div>
 
-  <div class="form-group row">
+  <div class="form-group row"><!-- remember me -->
     <div class="offset-lg-4 col-lg-4">
-      <div class="form-check">
-        <input type="checkbox" class="form-check-input" name="remember" value="1" id="<?= $_uid = strings::rand()  ?>">
-        <label class="form-check-label" for="<?= $_uid ?>">Remember Me</label>
+      <div class="form-check" id="<?= $_remember_me = strings::rand() ?>control">
+        <input type="checkbox" class="form-check-input" name="remember" value="1" id="<?= $_remember_me ?>">
+        <label class="form-check-label" for="<?= $_remember_me ?>">Remember Me</label>
+
+      </div>
+
+      <div class="alert alert-warning d-none" role="alert" id="<?= $_remember_me ?>warning">
+        <h6 class="alert-heading">Remember Me is disabled!</h6>
+        Exit <i>inPrivate</i> to save settings
 
       </div>
 
@@ -148,7 +154,7 @@ use strings; ?>
 
   </div>
 
-  <div class="form-group row">
+  <div class="form-group row"><!-- button -->
     <div class="offset-lg-4 col-lg-4 text-right">
       <button class="btn btn-primary" style="background-color: #3F3F95" type="submit">Check In</button>
 
@@ -359,6 +365,15 @@ $(document).ready( () => {
   });
 
   ( _ => {
+    _.inPrivate().then( b => {
+      if ( b) {
+        $('#<?= $_remember_me ?>control').addClass('d-none');
+        $('#<?= $_remember_me ?>warning').removeClass('d-none');
+
+      }
+
+    });
+
     let me = localStorage.getItem('c19');
     if ( !!me) {
       let _me = JSON.parse( me);
