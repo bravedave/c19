@@ -307,6 +307,7 @@ $(document).ready( () => {
         if ( 'ack' == d.response) {
           let p = _form.parent();
           p.load( _.url('<?= $this->route ?>/thanks'));
+          localStorage.setItem('c19-uid', JSON.stringify( d.data));
 
         }
         else {
@@ -319,6 +320,41 @@ $(document).ready( () => {
     }) (_brayworth_);
 
     return false;
+
+  });
+
+  $(document).on( 'checkout', () => {
+    console.log( 'checkout');
+    let uid = localStorage.getItem('c19-uid');
+    if ( !!uid) {
+      uid = JSON.parse( uid);
+
+      ( _ => {
+        _.post({
+          url : _.url('<?= $this->route ?>'),
+          data : {
+            action : 'checkout',
+            uid : uid.uid
+
+          },
+
+        }).then( d => {
+          if ( 'ack' == d.response) {
+            let p = $('#<?= $_form ?>').parent();
+            p.load( _.url('<?= $this->route ?>/checkedout'));
+            localStorage.removeItem('c19-uid');
+
+          }
+          else {
+            _.growl( d);
+
+          }
+
+        });
+
+      }) (_brayworth_);
+
+    }
 
   });
 
@@ -337,10 +373,10 @@ $(document).ready( () => {
       $('input[name="family-group"][value="yes"]', '#<?= $_form ?>').prop( 'checked', true).trigger( 'change');
 
       if ( !!_me.family) {
-        console.log( _me.family);
+        // console.log( _me.family);
         $('input[name="family\[\]"]').each( (i, el) => {
           if ( !!_me.family[i]) {
-            console.log( _me.family[i]);
+            // console.log( _me.family[i]);
             $(el).val( _me.family[i]);
 
           }
@@ -353,6 +389,57 @@ $(document).ready( () => {
     else {
       // set form state
       $('input[name="family-group"]:checked', '#<?= $_form ?>').trigger( 'change');
+
+    }
+
+    let uid = localStorage.getItem('c19-uid');
+    if ( !!uid) {
+      uid = JSON.parse( uid);
+      if ( !!uid.valid) {
+        let fm = s => { s = '00' + s; return s.substr(s.length -2, 2)};
+        let d = new Date();
+        let dt = d.getFullYear() + '-' + fm(d.getMonth() + 1) + '-' + fm(d.getDate());
+        // console.log( uid.valid, dt);
+        if ( uid.valid == dt) {
+          // console.log( uid);
+          _.post({
+            url : _.url('<?= $this->route ?>'),
+            data : {
+              action : 'get-checkout-url',
+              uid : uid.uid
+
+            },
+
+          }).then( d => {
+            if ( 'ack' == d.response) {
+              _.ask({
+                title : 'checkout',
+                text : 'Would you like to Checkout ?',
+                headClass : 'text-white bg-success',
+
+                buttons : {
+                  no : function() {
+                    $(this).modal( 'hide');
+
+                  },
+
+                  yes : function() {
+                    $(this).modal( 'hide');
+                    $(document).trigger( 'checkout');
+
+                  },
+
+                }
+
+              });
+
+            }
+
+          });
+
+        }
+
+      }
 
     }
 

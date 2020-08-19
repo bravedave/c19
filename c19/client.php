@@ -50,13 +50,26 @@ class client extends controller {
   protected function postHandler() {
     $action = $this->getPost( 'action');
 
-    if ( 'register' == $action) {
+    if( 'checkout' == $action) {
+      if ( $uid = $this->getPost( 'uid')) {
+        $dao = new dao\registrations;
+        if ( $dto = $dao->getByUID( $uid)) {
+          $dao->UpdateByID( ['checkout' => \db::dbTimeStamp()], $dto->id);
+          Json::ack( $action);
+
+        } else { Json::nak( $action); }
+
+      } else { Json::nak( $action); }
+
+    }
+    elseif ( 'register' == $action) {
       $a = [
         'event' => $this->getPost( 'event'),
         'name' => $this->getPost('name'),
         'party' => $this->getPost( 'party'),
         'phone' => $this->getPost( 'phone'),
         'address' => $this->getPost( 'address'),
+        'uid' => bin2hex( random_bytes( 11)),
         'created' => \db::dbTimeStamp()
 
       ];
@@ -76,7 +89,23 @@ class client extends controller {
 
       }
 
-      Json::ack( $action);
+      Json::ack( $action)
+        ->add( 'data', [
+          'uid' => $a['uid'],
+          'valid' => date('Y-m-d')
+
+        ]);
+
+    }
+    elseif( 'get-checkout-url' == $action) {
+      if ( $uid = $this->getPost( 'uid')) {
+        $dao = new dao\registrations;
+        if ( $dto = $dao->getByUID( $uid)) {
+          Json::ack( $action);
+
+        } else { Json::nak( $action); }
+
+      } else { Json::nak( $action); }
 
     }
     else {
@@ -116,7 +145,12 @@ class client extends controller {
 
   }
 
-  function thanks() {
+  public function checkedout() {
+    $this->load('thanks-for-checkout');
+
+  }
+
+  public function thanks() {
     $this->load('thanks-for-registering');
 
   }
