@@ -133,6 +133,30 @@ class controller extends dvc\Controller {
 
   }
 
+  protected function postHandler() {
+    $action = $this->getPost( 'action');
+
+    if ( 'save-settings' == $action) {
+      $registration_ttl = (int)$this->getPost( 'registration_ttl');
+
+      if ( $registration_ttl > 0) {
+        config::c19_registration_ttl( $registration_ttl);
+        Json::ack( $action);
+
+      }
+      else {
+        Json::nak( $action);
+
+      }
+
+
+    }
+    else {
+      parent::postHander();
+
+    }
+  }
+
   public function __construct($rootPath) {
       // \sys::logger( sprintf('<%s> %s', get_class($this), __METHOD__));
       if ( \in_array( get_class($this),[
@@ -240,6 +264,11 @@ class controller extends dvc\Controller {
       }
 
     }
+
+  }
+
+  public function settings() {
+    $this->load( 'settings');
 
   }
 

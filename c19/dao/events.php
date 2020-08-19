@@ -17,7 +17,7 @@ class events extends _dao {
 	protected $template = '\c19\dao\dto\events';
 
   public function getOpenEventsWithAttendance() {
-    $sql = sprintf( 'SELECT
+    $sql = 'SELECT
         `events`.*,
         regs.tot
       FROM `events`
@@ -28,11 +28,7 @@ class events extends _dao {
         FROM `registrations`
         GROUP BY `event`) regs
           ON regs.`event` = `events`.`id`
-      ORDER BY `id` DESC',
-      \db::dbTimeStamp(),
-      \db::dbTimeStamp()
-
-    );
+      ORDER BY `id` DESC';
 
     // \sys::logSQL( $sql);
 
@@ -49,7 +45,7 @@ class events extends _dao {
       \db::dbTimeStamp()
 
     );
-    \sys::logSQL( $sql);
+    // \sys::logSQL( $sql);
 
     return $this->Result( $sql);
 
@@ -69,6 +65,53 @@ class events extends _dao {
       $id);
 
     return $this->Result( $sql);
+
+  }
+
+  public function purge( $ttl) {
+    $dead_date = date( 'Y-m-d H:i:s', time() - $ttl);
+    $sql = sprintf( 'SELECT
+        `events`.`id`,
+        `events`.`created`,
+        `events`.`end`,
+        regs.tot
+      FROM `events`
+        LEFT JOIN
+        (SELECT
+          `event`,
+          count(*) tot
+        FROM `registrations`
+        GROUP BY `event`) regs
+          ON regs.`event` = `events`.`id`
+      WHERE
+        `events`.open = 0
+        AND
+        (`created` IS NULL OR `created` <= "%s")
+        AND
+        (`end` <= "%s")
+        AND
+        ( regs.tot IS NULL OR regs.tot = 0)',
+      $dead_date,
+      $dead_date
+
+    );
+
+    // \sys::logSQL( sprintf('<%s> %s', $sql, __METHOD__));
+    if ( $res = $this->Result( $sql)) {
+      $ids = [];
+      while ( $dto = $res->dto()) {
+        $ids[] = $dto->id;
+
+      }
+
+      if ( $ids) {
+        $sql = sprintf( 'DELETE FROM `events` WHERE id IN (%s)', implode( ',', $ids));
+        // \sys::logSQL( sprintf('<%s> %s', $sql, __METHOD__));
+        $this->Q( $sql);
+
+      }
+
+    }
 
   }
 

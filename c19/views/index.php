@@ -24,8 +24,27 @@ use strings;    ?>
     </div>
 
     <div class="nav-item">
+        <a class="nav-link" href="#" id="<?= $_settings = strings::rand() ?>">settings</a>
+
+    </div>
+
+    <div class="nav-item">
         <a class="nav-link" href="<?= strings::url( 'logout') ?>">logoff</a>
 
     </div>
 
 </nav>
+<script>
+$(document).ready( () => {
+  $('#<?= $_settings ?>').on( 'click', function( e) {
+    e.stopPropagation();e.preventDefault();
+
+    ( _ => {
+      _.get.modal(_.url('<?= $this->route ?>/settings'));
+
+    }) (_brayworth_);
+
+  })
+
+});
+</script>

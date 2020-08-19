@@ -30,7 +30,6 @@ class config extends dvc\config {
 
 	static function c19_checkdatabase() {
 		if ( self::c19_version() < self::c19_db_version) {
-
       $dao = new dao\dbinfo;
 			$dao->dump( $verbose = false);
 
@@ -42,6 +41,10 @@ class config extends dvc\config {
     // if ( time() - self::c19_purged() > 30) {
       $dao = new dao\registrations();
       $dao->purge( self::$_REGISTRATION_TTL);
+
+      $dao = new dao\events();
+      $dao->purge( self::$_REGISTRATION_TTL);
+
       self::c19_purged( time());
 
     }
@@ -96,6 +99,39 @@ class config extends dvc\config {
 		}
 
 		return $ret;
+
+  }
+
+  static function c19_registration_ttl_days() {
+    $days = self::c19_registration_ttl() / 86400;
+    if ( $days == (int)$days) {
+      return (int)$days;
+
+    }
+    else {
+      return round( $days, 2);
+
+    }
+
+  }
+
+  static function c19_registration_ttl( $set = null) {
+    $ret = self::$_REGISTRATION_TTL;
+
+		if ( (float)$set) {
+			$config = self::c19_config();
+
+			$j = file_exists( $config) ?
+				json_decode( file_get_contents( $config)):
+				(object)[];
+
+			self::$_REGISTRATION_PURGE = $j->registration_ttl = $set;
+
+			file_put_contents( $config, json_encode( $j, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+
+		}
+
+    return $ret;
 
   }
 
