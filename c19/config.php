@@ -19,8 +19,9 @@ class config extends dvc\config {
 	const allow_password_recovery = true;
   const use_inline_logon = true;
 
-	static $REQUIRE_AUTHORIZATION = false;
+	static $CHECKOUT = false;
   static $CLIENT_TITLE = 'Bilinga Check In';
+	static $REQUIRE_AUTHORIZATION = false;
 
 	static $WEBNAME = 'Attendance Checking';
 
@@ -141,7 +142,8 @@ class config extends dvc\config {
 			'c19_version' => self::$_C19_VERSION,
 			'registration_ttl' => self::$_REGISTRATION_TTL,
 			'registration_purge' => self::$_REGISTRATION_PURGE,
-			'require_authorization' => false,
+      'require_authorization' => false,
+      'checkout' => self::$CHECKOUT
 
 		];
 
@@ -153,6 +155,7 @@ class config extends dvc\config {
 			self::$_REGISTRATION_TTL = $a->registration_ttl;
 			self::$_REGISTRATION_PURGE = $a->registration_purge;
 			self::$REQUIRE_AUTHORIZATION = (bool)$a->require_authorization;
+			self::$CHECKOUT = (bool)$a->checkout;
 
 		}
 
