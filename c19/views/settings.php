@@ -27,7 +27,7 @@ use strings;  ?>
           </div>
 
           <div class="modal-body">
-            <div class="row">
+            <div class="form-group row">
               <div class="col">
                 <label for="<?= $_uid = strings::rand() ?>">Registration TTL</label>
                 <div class="input-group">
@@ -44,6 +44,34 @@ use strings;  ?>
                 <div class="form-text text-muted">
                   The <strong>Registration TTL</strong> is the number of seconds before
                   Registrants are automatically purged (i.e. days * 24 * 60 * 60, 1 day = 86400)
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" name="checkout" value="1"
+                    <?php if ( config::$CHECKOUT) print 'checked'; ?>
+                    id="<?= $uid = strings::rand() ?>">
+
+                  <label class="form-check-label" for="<?= $uid ?>">
+                    Enable Checkout
+
+                  </label>
+
+                </div>
+
+                <div class="form-text text-muted">
+                  <strong>Checkout</strong> will succeed if
+                  <ul>
+                    <li>The browser is <strong>NOT</strong> in incognito mode</li>
+                    <li><strong>AND</strong> the user returns to the app on the <strong>same date</strong></li>
+
+                  </ul>
+
                 </div>
 
               </div>

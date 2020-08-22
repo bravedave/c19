@@ -126,11 +126,32 @@ class config extends dvc\config {
 				json_decode( file_get_contents( $config)):
 				(object)[];
 
-			self::$_REGISTRATION_PURGE = $j->registration_ttl = $set;
+			if ( $j->registration_ttl != $set) {
+        self::$_REGISTRATION_PURGE = $j->registration_ttl = $set;
+        file_put_contents( $config, json_encode( $j, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 
-			file_put_contents( $config, json_encode( $j, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+      }
 
 		}
+
+    return $ret;
+
+  }
+
+  static function c19_checkout( $set = null) {
+    $ret = self::$_REGISTRATION_TTL;
+
+    $config = self::c19_config();
+
+    $j = file_exists( $config) ?
+      json_decode( file_get_contents( $config)):
+      (object)[];
+
+    if ( $j->checkout != $set) {
+      self::$CHECKOUT = $j->checkout = (bool)$set;
+      file_put_contents( $config, json_encode( $j, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+
+    }
 
     return $ret;
 

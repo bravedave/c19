@@ -141,14 +141,12 @@ class controller extends dvc\Controller {
 
       if ( $registration_ttl > 0) {
         config::c19_registration_ttl( $registration_ttl);
-        Json::ack( $action);
-
-      }
-      else {
-        Json::nak( $action);
 
       }
 
+      config::c19_checkout( (int)$this->getPost( 'checkout'));
+
+      Json::ack( $action);
 
     }
     else {
