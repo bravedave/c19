@@ -126,7 +126,7 @@ class config extends dvc\config {
 				json_decode( file_get_contents( $config)):
 				(object)[];
 
-			if ( $j->registration_ttl != $set) {
+			if ( !isset($j->registration_ttl) || $j->registration_ttl != $set) {
         self::$_REGISTRATION_PURGE = $j->registration_ttl = $set;
         file_put_contents( $config, json_encode( $j, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 
@@ -147,7 +147,7 @@ class config extends dvc\config {
       json_decode( file_get_contents( $config)):
       (object)[];
 
-    if ( $j->checkout != $set) {
+    if ( !isset($j->checkout) || $j->checkout != $set) {
       self::$CHECKOUT = $j->checkout = (bool)$set;
       file_put_contents( $config, json_encode( $j, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 
