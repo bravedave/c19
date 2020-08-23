@@ -54,7 +54,7 @@ class client extends controller {
       if ( $uid = $this->getPost( 'uid')) {
         $dao = new dao\registrations;
         if ( $dto = $dao->getByUID( $uid)) {
-          $dao->UpdateByID( ['checkout' => \db::dbTimeStamp()], $dto->id);
+          $dao->checkOutParty( $dto);
           Json::ack( $action);
 
         } else { Json::nak( $action); }
@@ -151,7 +151,25 @@ class client extends controller {
   }
 
   public function thanks() {
-    $this->load('thanks-for-registering');
+    $this->data = (object)[
+      'dtoSet' => false
+
+    ];
+
+    if ( $uid = $this->getParam( 'uid')) {
+      // \sys::logger( sprintf('<%s> %s', $uid, __METHOD__));
+
+      $dao = new dao\registrations;
+      $this->data->dtoSet = $dao->getPartyByUID( $uid);
+      // \sys::dump( $this->data->dtoSet);
+
+      $this->load('thanks-for-registering');
+
+    }
+    else {
+      $this->load('thanks-for-registering');
+
+    }
 
   }
 

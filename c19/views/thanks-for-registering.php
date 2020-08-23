@@ -9,6 +9,18 @@
 */    ?>
 
 <div class="alert alert-info" role="alert">
-  thanks for registering
+  <h5>thanks for registering</h5>
+
+  <?php
+  if ( $this->data->dtoSet) {
+    print '<ul>';
+    foreach ($this->data->dtoSet as $dto) {
+      printf( '<li>%s</li>', $dto->name);
+
+    }
+    print '</ul>';
+
+  } ?>
+
 </div>
 

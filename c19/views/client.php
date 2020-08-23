@@ -312,7 +312,7 @@ $(document).ready( () => {
       }).then( d => {
         if ( 'ack' == d.response) {
           let p = _form.parent();
-          p.load( _.url('<?= $this->route ?>/thanks'));
+          p.load( _.url('<?= $this->route ?>/thanks?uid=' + encodeURIComponent( d.data.uid)));
           localStorage.setItem('c19-uid', JSON.stringify( d.data));
 
         }
@@ -383,10 +383,12 @@ $(document).ready( () => {
       $('input[name="address"]', '#<?= $_form ?>').val( _me.address);
       $('input[name="remember"]', '#<?= $_form ?>').prop( 'checked', true);
 
-      // set form state
-      $('input[name="family-group"][value="yes"]', '#<?= $_form ?>').prop( 'checked', true).trigger( 'change');
-
       if ( !!_me.family) {
+        // set form state
+        $('input[name="family-group"][value="yes"]', '#<?= $_form ?>')
+        .prop( 'checked', true)
+        .trigger( 'change');
+
         console.log( _me.family);
         if ( 'string' == typeof _me.family) {
             $('input[name="family\[\]"]').val( _me.family);

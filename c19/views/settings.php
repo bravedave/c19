@@ -67,7 +67,9 @@ use strings;  ?>
                 <div class="form-text text-muted">
                   <strong>Checkout</strong> will succeed if
                   <ul>
-                    <li>The browser is <strong>NOT</strong> in incognito mode</li>
+                    <li>The browser is <strong>NOT</strong> in private
+                      <sup><a href="https://support.apple.com/en-us/HT203036" target="_blank"><i class="fa fa-external-link"></i></a></sup>
+                      mode</li>
                     <li><strong>AND</strong> the user returns to the app on the <strong>same date</strong></li>
 
                   </ul>
