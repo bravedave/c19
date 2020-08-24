@@ -57,7 +57,8 @@ use strings; ?>
   <div class="form-group row">
     <div class="offset-lg-4 col-lg-4">
       <label for="<?= $_uid = strings::rand() ?>">Name</label>
-      <input type="text" class="form-control" name="name" placeholder="name" required pattern="[a-zA-Z0-9].*" id="<?= $_uid ?>">
+      <input type="text" class="form-control" name="name" placeholder="name" required
+        title="your name" pattern="[a-zA-Z0-9].*" id="<?= $_uid ?>">
 
     </div>
 
@@ -70,7 +71,8 @@ use strings; ?>
           <div class="input-group-text"><i class="fa fa-phone"></i></div>
         </div>
 
-        <input type="tel" class="form-control" name="phone" placeholder="0417 000 000" required pattern="[0-9].*">
+        <input type="tel" class="form-control" name="phone" placeholder="0417000000" required
+          title="enter a 10 digit telphone with no spaces" pattern="[0-9]{10}">
 
       </div>
 
@@ -86,7 +88,8 @@ use strings; ?>
           <div class="input-group-text"><i class="fa fa-at"></i></div>
         </div>
 
-        <input type="text" class="form-control" name="address" placeholder="@" required pattern="[a-zA-Z0-9].*" id="<?= $_uid ?>">
+        <input type="text" class="form-control" name="address" placeholder="@" required
+          title="your address" pattern="[a-zA-Z0-9].*" id="<?= $_uid ?>">
 
       </div>
 
