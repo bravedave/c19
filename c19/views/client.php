@@ -392,7 +392,7 @@ $(document).ready( () => {
         .prop( 'checked', true)
         .trigger( 'change');
 
-        console.log( _me.family);
+        // console.log( _me.family);
         if ( 'string' == typeof _me.family) {
             $('input[name="family\[\]"]').val( _me.family);
 
