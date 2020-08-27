@@ -124,6 +124,11 @@ $dto = $this->data->dto;    ?>
 
         });
 
+        $('input[name="start"], input[name="start"]', '#<?= $_form ?>').on( 'change', function( e) {
+          e.target.value = e.target.value.substr( 0, 16);
+
+        });
+
         $('input[name="open"]', '#<?= $_form ?>').trigger( 'change');
 
         $('#<?= $_form ?>').on( 'submit', function( e) {
