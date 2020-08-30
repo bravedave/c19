@@ -29,26 +29,48 @@ use dvc;    ?>
 
       </li>
 
-      <li class="nav-item d-none d-md-list-item">
-        <a class="nav-link" href="<?= strings::url() ?>" target="_blank">
+      <li class="nav-item">
+        <a class="nav-link" href="<?= strings::url() ?>" target="_blank" rel="noopener">
           <?= dvc\icon::get( dvc\icon::app ) ?>
+          <span class="d-md-none"> register</span>
 
         </a>
 
       </li>
 
       <li class="nav-item d-md-none">
-          <a class="nav-link" href="<?= strings::url( 'events') ?>">events</a>
+        <a class="nav-link" href="<?= strings::url( 'events') ?>">
+          <?= dvc\icon::get( dvc\icon::calendar_event ) ?>
+          <i class="fa"></i>events
+
+        </a>
 
       </li>
 
       <li class="nav-item d-md-none">
-          <a class="nav-link" href="<?= strings::url( 'users') ?>">users</a>
+        <a class="nav-link" href="<?= strings::url( 'users') ?>">
+          <?= dvc\icon::get( dvc\icon::people ) ?>
+          users
+
+        </a>
 
       </li>
 
       <div class="nav-item d-md-none">
-          <a class="nav-link" href="<?= strings::url( 'logout') ?>">logoff</a>
+        <a class="nav-link" href="#" id="<?= $_settings = strings::rand() ?>">
+          <?= dvc\icon::get( dvc\icon::sliders ) ?>
+          settings
+
+        </a>
+
+      </div>
+
+      <div class="nav-item d-md-none">
+        <a class="nav-link" href="<?= strings::url( 'logout') ?>">
+          <?= dvc\icon::get( dvc\icon::person_dash ) ?>
+          logoff
+
+        </a>
 
       </div>
 
@@ -65,3 +87,15 @@ use dvc;    ?>
   </div>
 
 </nav>
+<script>
+$(document).ready( () => {
+  $('#<?= $_settings ?>').on( 'click', function( e) {
+    ( _ => {
+      _.get.modal(_.url('admin/settings'));
+
+    }) (_brayworth_);
+
+  })
+
+});
+</script>
