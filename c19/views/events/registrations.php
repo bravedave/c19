@@ -15,46 +15,36 @@ use strings;
 $dto = $this->data->event;  ?>
 
 <h1 class="d-none d-print-block"><?= $this->title ?></h1>
-<table class="table table-sm">
-	<thead class="small">
-		<tr>
-			<td class="h5 m-0">Event</td>
-			<td colspan="2">Duration</td>
+<div class="row">
+  <div class="col text-truncate h5 m-0 pt-2"><?= $dto->description ?></div>
+  <div class="col-2 text-right pl-0">
+    <button class="btn btn-light"
+      id="<?= $_editor = strings::rand() ?>">
+      <i class="fa fa-pencil"></i>
 
-		</tr>
+    </button>
 
-	</thead>
+  </div>
 
-	<tbody>
-    <tr>
-      <?php
-      printf( '<td>%s</td>', $dto->description);
-      if ( $dto->open) {
-        printf( '<td>%s</td>', 'open event');
+</div>
 
-      }
-      else {
-        printf( '<td>%s - %s</td>',
-          strings::asLocalDate( $dto->start, $time = true),
-          strings::asLocalDate( $dto->end, $time = true));
+<div class="row mb-2">
+  <div class="col border-bottom">
+  <?php
+  if ( $dto->open) {
+    print 'open event';
 
-      } ?>
+  }
+  else {
+    printf( '%s - %s',
+      strings::asLocalDate( $dto->start, $time = true),
+      strings::asLocalDate( $dto->end, $time = true));
 
+  } ?>
 
-      <td>
-        <button class="btn btn-light btn-sm"
-          id="<?= $_editor = strings::rand() ?>">
-          <i class="fa fa-pencil"></i>
+  </div>
 
-        </button>
-
-      </td>
-
-    </tr>
-
-  </tbody>
-
-</table>
+</div>
 
 <h5 id="<?= $_registrations = strings::rand() ?>heading" class="d-flex">
   Attendees
@@ -62,7 +52,11 @@ $dto = $this->data->event;  ?>
     <span class="sr-only">Loading...</span>
   </div>
 </h5>
-<div id="<?= $_registrations ?>"></div>
+
+<div class="row">
+  <div class="col px-0 px-md-3" id="<?= $_registrations ?>">&nbsp;</div>
+
+</div>
 
 <script>
 $(document).ready( () => {
