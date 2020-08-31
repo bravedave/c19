@@ -19,29 +19,40 @@ $dto = $this->data->event;  ?>
 	<thead class="small">
 		<tr>
 			<td class="h5 m-0">Event</td>
-			<td>Duration</td>
+			<td colspan="2">Duration</td>
 
 		</tr>
 
 	</thead>
 
 	<tbody>
-	<?php
-		printf( '<td>%s</td>', $dto->description);
-		if ( $dto->open) {
-      printf( '<td>%s</td>', 'open event');
+    <tr>
+      <?php
+      printf( '<td>%s</td>', $dto->description);
+      if ( $dto->open) {
+        printf( '<td>%s</td>', 'open event');
 
-    }
-    else {
-      printf( '<td>%s - %s</td>',
-        strings::asLocalDate( $dto->start, $time = true),
-        strings::asLocalDate( $dto->end, $time = true));
+      }
+      else {
+        printf( '<td>%s - %s</td>',
+          strings::asLocalDate( $dto->start, $time = true),
+          strings::asLocalDate( $dto->end, $time = true));
 
-    }
+      } ?>
 
-		print '</tr>';
 
-  ?></tbody>
+      <td>
+        <button class="btn btn-light btn-sm"
+          id="<?= $_editor = strings::rand() ?>">
+          <i class="fa fa-pencil"></i>
+
+        </button>
+
+      </td>
+
+    </tr>
+
+  </tbody>
 
 </table>
 
@@ -78,6 +89,14 @@ $(document).ready( () => {
     $(document).on( 'edit-attendee', ( e, id ) => {
       _.get.modal( _.url( '<?= $this->route ?>/editRegistration/' + id))
         .then( modal => modal.on('success', e => $('#<?= $_registrations ?>').trigger('get-attendees')));
+
+    });
+
+    $('#<?= $_editor ?>').on( 'click', function( e) {
+      e.stopPropagation();e.preventDefault();
+
+      _.get.modal( _.url('<?= $this->route ?>/edit/<?= $dto->id ?>'))
+      .then( m => m.on( 'success', e => window.location.reload()));
 
     });
 
