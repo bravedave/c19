@@ -17,6 +17,6 @@ class events extends _dto {
 	public $description = '';
 	public $start = '';
 	public $end = '';
-	public $open = 1;
+	public $open = 0;
 
 }

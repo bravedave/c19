@@ -348,9 +348,10 @@ $(document).ready( () => {
 
         }).then( d => {
           if ( 'ack' == d.response) {
-            let p = $('#<?= $_form ?>').parent();
-            p.load( _.url('<?= $this->route ?>/checkedout'));
+            let p = $('div[data-role="content"]');
+            p.load( _.url('<?= $this->route ?>/checkedout?uid=' + encodeURIComponent( d.data.uid)));
             localStorage.removeItem('c19-uid');
+            console.log('checked out');
 
           }
           else {

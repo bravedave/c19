@@ -55,7 +55,11 @@ class client extends controller {
         $dao = new dao\registrations;
         if ( $dto = $dao->getByUID( $uid)) {
           $dao->checkOutParty( $dto);
-          Json::ack( $action);
+          Json::ack( $action)
+            ->add( 'data', [
+              'uid' => $uid
+
+            ]);
 
         } else { Json::nak( $action); }
 
@@ -78,7 +82,6 @@ class client extends controller {
       $id = $dao->Insert( $a);
 
       if ( $family = $this->getPost('family')) {
-
         $a['parent'] = $id;
         $family = (array)$family;
         foreach ($family as $kid) {
@@ -146,6 +149,20 @@ class client extends controller {
   }
 
   public function checkedout() {
+    $this->data = (object)[
+      'dtoSet' => false
+
+    ];
+
+    if ( $uid = $this->getParam( 'uid')) {
+      // \sys::logger( sprintf('<%s> %s', $uid, __METHOD__));
+
+      $dao = new dao\registrations;
+      $this->data->dtoSet = $dao->getPartyByUID( $uid);
+      // \sys::dump( $this->data->dtoSet);
+
+    }
+
     $this->load('thanks-for-checkout');
 
   }
@@ -163,13 +180,9 @@ class client extends controller {
       $this->data->dtoSet = $dao->getPartyByUID( $uid);
       // \sys::dump( $this->data->dtoSet);
 
-      $this->load('thanks-for-registering');
-
     }
-    else {
-      $this->load('thanks-for-registering');
 
-    }
+    $this->load('thanks-for-registering');
 
   }
 
