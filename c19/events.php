@@ -22,7 +22,7 @@ class events extends controller {
 
 		if ( 'delete' == $action) {
 			if ( ( $id = (int)$this->getPost('id')) > 0 ) {
-				$dao = new dao\people;
+				$dao = new dao\events;
 				$dao->delete( $id);
 
 				Json::ack( $action);

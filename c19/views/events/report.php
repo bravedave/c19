@@ -87,7 +87,53 @@ $(document).ready( () => {
 
 	$('#<?= $_table ?> > tbody > tr').each( ( i, tr) => {
 
-		$(tr)
+		let context = function( e) {
+			if ( e.shiftKey)
+				return;
+
+			e.stopPropagation();e.preventDefault();
+
+			let _tr = $(this);
+
+			( _ => {
+				_.hideContexts();
+
+				let _context = _.context();
+
+				_context.append( $('<a href="#"><b>view registrations</b></a>').on( 'click', function( e) {
+					e.stopPropagation();e.preventDefault();
+
+					_context.close();
+
+					_tr.trigger( 'view-registrations');
+
+				}));
+
+				_context.append( $('<a href="#">edit</a>').on( 'click', function( e) {
+					e.stopPropagation();e.preventDefault();
+
+					_context.close();
+
+					_tr.trigger( 'edit');
+
+				}));
+
+				_context.append( $('<a href="#"><i class="fa fa-trash"></i>delete</a>').on( 'click', function( e) {
+					e.stopPropagation();e.preventDefault();
+
+					_context.close();
+
+					_tr.trigger( 'delete');
+
+				}));
+
+				_context.open( e);
+
+			})( _brayworth_);
+
+		};
+
+    $(tr)
 		.addClass( 'pointer' )
 		.on( 'delete', function( e) {
 			let _tr = $(this);
@@ -155,54 +201,19 @@ $(document).ready( () => {
       _brayworth_.nav( '<?= $this->route ?>/registrations/' + _data.id);
 
 		})
-		.on( 'contextmenu', function( e) {
-			if ( e.shiftKey)
-				return;
-
-			e.stopPropagation();e.preventDefault();
-
-			let _tr = $(this);
-
-			( _ => {
-				_.hideContexts();
-
-				let _context = _.context();
-
-				_context.append( $('<a href="#"><b>view registrations</b></a>').on( 'click', function( e) {
-					e.stopPropagation();e.preventDefault();
-
-					_context.close();
-
-					_tr.trigger( 'view-registrations');
-
-				}));
-
-				_context.append( $('<a href="#">edit</a>').on( 'click', function( e) {
-					e.stopPropagation();e.preventDefault();
-
-					_context.close();
-
-					_tr.trigger( 'edit');
-
-				}));
-
-				_context.append( $('<a href="#"><i class="fa fa-trash"></i>delete</a>').on( 'click', function( e) {
-					e.stopPropagation();e.preventDefault();
-
-					_context.close();
-
-					_tr.trigger( 'delete');
-
-				}));
-
-				_context.open( e);
-
-			})( _brayworth_);
-
-		})
+		.on( 'contextmenu', context)
 		.on( 'click', function(e) {
-			e.stopPropagation(); e.preventDefault();
-			$(this).trigger( 'view-registrations');
+
+      let _me = $(this);
+      if ( _brayworth_.browser.isMobileDevice) {
+        context.call( this, e);
+
+      }
+      else {
+        e.stopPropagation(); e.preventDefault();
+        _me.trigger( 'view-registrations');
+
+      }
 
 		});
 
