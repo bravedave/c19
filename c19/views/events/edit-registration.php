@@ -32,7 +32,33 @@ $dto = $this->data->dto;  ?>
           </div>
 
           <div class="modal-body">
-            <input type="text" class="form-control" name="name" value="<?= $dto->name ?>">
+            <div class="form-group row">
+              <div class="col">
+                <input type="text" class="form-control" name="name" value="<?= $dto->name ?>">
+
+              </div>
+
+            </div>
+
+            <?php if ( !( strtotime( $dto->checkout) > 0)) {  ?>
+              <div class="form-group row">
+                <div class="col">
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="checkout" value="yes"
+                      id="<?= $uid = strings::rand() ?>">
+
+                    <label class="form-check-label" for="<?= $uid ?>">
+                      Checkout
+
+                    </label>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            <?php } // if ( strtotime( $dto->checkout))  ?>
 
           </div>
 
@@ -40,9 +66,13 @@ $dto = $this->data->dto;  ?>
             <button type="submit" class="btn btn-primary">Save</button>
 
           </div>
+
         </div>
+
       </div>
+
     </div>
+
   </form>
   <script>
   $(document).ready( () => {

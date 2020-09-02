@@ -86,6 +86,30 @@ $(document).ready( () => {
 
     });
 
+    $(document).on( 'checkout-attendee', ( e, id ) => {
+      // console.log( '<?= $this->route ?>', id);
+      _.post({
+        url : _.url('<?= $this->route ?>'),
+        data : {
+          action : 'checkout-attendee',
+          id : id
+
+        },
+
+      }).then( d => {
+        if ( 'ack' == d.response) {
+          $('#<?= $_registrations ?>').trigger('get-attendees');
+
+        }
+        else {
+          _.growl( d);
+
+        }
+
+      });
+
+    });
+
     $('#<?= $_editor ?>').on( 'click', function( e) {
       e.stopPropagation();e.preventDefault();
 

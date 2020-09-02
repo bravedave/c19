@@ -30,6 +30,18 @@ class events extends controller {
 			} else { Json::nak( $action); }
 
 		}
+		elseif ( 'checkout-attendee' == $action) {
+      if ( $id = $this->getPost( 'id')) {
+        $dao = new dao\registrations;
+        if ( $dto = $dao->getByID( $id)) {
+          $dao->checkOutParty( $dto);
+          Json::ack( $action);
+
+        } else { Json::nak( sprintf( 'registrant not found (%s) : %s', $id, $action)); }
+
+      } else { Json::nak( sprintf( 'invalid id : %s', $action)); }
+
+		}
 		elseif ( 'save-events' == $action) {
 			$a = [
 				'updated' => \db::dbTimeStamp(),
@@ -71,13 +83,21 @@ class events extends controller {
 			$a = [
 				'name' => $this->getPost('name'),
 
-			];
+      ];
 
 			if ( ( $id = (int)$this->getPost('id')) > 0 ) {
-				$dao = new dao\registrations;
-				$dao->UpdateByID( $a, $id);
-				Json::ack( $action)
-					->add( 'id', $id);
+        $dao = new dao\registrations;
+        if ( $dto = $dao->getByID( $id)) {
+          $dao->UpdateByID( $a, $id);
+          Json::ack( $action)
+            ->add( 'id', $id);
+
+          if ( 'yes' == $this->getPost( 'checkout')) {
+            $dao->checkOutParty( $dto);
+
+          }
+
+        } else { Json::nak( $action); }
 
       } else { Json::nak( $action); }
 

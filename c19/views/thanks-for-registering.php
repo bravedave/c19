@@ -26,6 +26,8 @@
   your stay at the Club so your registration can be
   verified if required.</p>
 
+  <p>OR - take a screenshot</p>
+
   <div><?= date('r') ?></div>
 
   <?php if ( config::$CHECKOUT) { ?>

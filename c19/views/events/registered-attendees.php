@@ -36,7 +36,12 @@ use strings;  ?>
     $parties = 0;
     while ( $dto = $this->data->registrations->dto()) {
       if ( !$dto->parent) $parties += (int)$dto->party;
-      printf( '<tr data-id="%d">', $dto->id);
+      printf(
+        '<tr data-checkout="%s" data-id="%d">',
+        strtotime( $dto->checkout) > 0 ? 'yes' : 'no',
+        $dto->id
+
+      );
 
       print '<td class="small text-center" line-number>&nbsp;</td>';
 
@@ -105,10 +110,44 @@ $(document).ready( () => {
       $(document).trigger( 'edit-attendee', _data.id);
 
     })
+    .on( 'checkout', function( e) {
+      let _me = $(this);
+      let _data = _me.data();
+
+      $(document).trigger( 'checkout-attendee', _data.id);
+
+    })
     .on( 'click', function( e) {
       e.stopPropagation();e.preventDefault();
 
       $(this).trigger('edit');
+
+    })
+    .on( 'contextmenu', function( e) {
+      if ( e.shiftKey)
+        return;
+
+      e.stopPropagation();e.preventDefault();
+
+      let _me = $(this);
+      let _data = _me.data();
+
+      _brayworth_.hideContexts();
+
+      let _context = _brayworth_.context();
+
+      if ( 'no' == _data.checkout) {
+        _context.append( $('<a href="#">checkout</a>').on( 'click', function( e) {
+          e.stopPropagation();e.preventDefault();
+
+          _me.trigger( 'checkout');
+          _context.close();
+
+        }));
+
+      }
+
+      if ( _context.length > 0) _context.open( e);
 
     });
 
