@@ -47,23 +47,26 @@ use dvc;    ?>
 
       </li>
 
-      <li class="nav-item d-md-none">
-        <a class="nav-link" href="<?= strings::url( 'users') ?>">
-          <?= dvc\icon::get( dvc\icon::people ) ?>
-          users
+      <?php if ( currentUser::isAdmin()) {  ?>
+        <li class="nav-item d-md-none">
+          <a class="nav-link" href="<?= strings::url( 'users') ?>">
+            <?= dvc\icon::get( dvc\icon::people ) ?>
+            users
 
-        </a>
+          </a>
 
-      </li>
+        </li>
 
-      <div class="nav-item d-md-none">
-        <a class="nav-link" href="#" id="<?= $_settings = strings::rand() ?>">
-          <?= dvc\icon::get( dvc\icon::sliders ) ?>
-          settings
+        <div class="nav-item d-md-none">
+          <a class="nav-link" href="#" id="<?= $_settings = strings::rand() ?>">
+            <?= dvc\icon::get( dvc\icon::sliders ) ?>
+            settings
 
-        </a>
+          </a>
 
-      </div>
+        </div>
+
+      <?php } // if ( currentUser::isAdmin())  ?>
 
       <div class="nav-item d-md-none">
         <a class="nav-link" href="<?= strings::url( 'logout') ?>">
@@ -82,20 +85,31 @@ use dvc;    ?>
 
       </li>
 
+      <?php if ( config::$REQUIRE_AUTHORIZATION) {  ?>
+      <li class="nav-item d-none d-md-list-item">
+        <a class="nav-link" title="logout" href="<?= strings::url( 'logout') ?>"><i class="fa fa-times"></i></a>
+
+      </li>
+
+      <?php } ?>
+
     </ul>
 
   </div>
 
 </nav>
-<script>
-$(document).ready( () => {
-  $('#<?= $_settings ?>').on( 'click', function( e) {
-    ( _ => {
-      _.get.modal(_.url('admin/settings'));
+<?php if ( currentUser::isAdmin()) {  ?>
+  <script>
+  $(document).ready( () => {
+    $('#<?= $_settings ?>').on( 'click', function( e) {
+      ( _ => {
+        _.get.modal(_.url('admin/settings'));
 
-    }) (_brayworth_);
+      }) (_brayworth_);
 
-  })
+    })
 
-});
-</script>
+  });
+  </script>
+
+<?php } // if ( currentUser::isAdmin())  ?>

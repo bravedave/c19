@@ -79,7 +79,7 @@ class controller extends dvc\Controller {
           'primary' => 'home',
           'secondary' => [
             'index',
-            'qr-code'
+            'qr-code',
 
           ]
 
@@ -112,21 +112,28 @@ class controller extends dvc\Controller {
     \dvc\pages\bootstrap::$primaryClass = 'col-md-9 col-xl-10 pt-3 pb-4';
     \dvc\pages\bootstrap::$secondaryClass = 'd-none d-md-block col-md-3 col-xl-2 bg-secondary text-light pt-3 pb-4 d-print-none';
 
+    $navbar = implode(
+      DIRECTORY_SEPARATOR, [
+        __DIR__,
+        'views',
+        'navbar'
+
+      ]
+
+    );
+
     $params = \array_merge([
       'css' => [],
       'scripts' => [],
       'data' => [],
       'left-interface' => true,
-      'navbar' => implode( DIRECTORY_SEPARATOR, [
-        __DIR__,
-        'views',
-        'navbar'
-      ])
+      'navbar' => $navbar
 
     ], $params);
 
     $params['data'] = \array_merge(['title' => config::$WEBNAME], (array)$params['data']);
-    $params['css'][] = sprintf('<link type="text/css" rel="stylesheet" media="all" href="%s" />', strings::url('/c19css'));
+    $params['css'][] = sprintf('<link type="text/css" rel="stylesheet" media="all" href="%s" />', strings::url('c19css'));
+    $params['css'][] = sprintf('<link rel="icon" href="%s" sizes="32x32" />', strings::url('image/apple-touch-icon-32x32.png'));
     // $params['scripts'][] = sprintf('<script type="text/javascript" src="%s"></script>', strings::url( 'fatjs'));
 
     parent::render($params);
@@ -196,6 +203,7 @@ class controller extends dvc\Controller {
       'apple-touch-icon-57x57.png',
       'apple-touch-icon-114x114.png',
       'apple-touch-icon-72x72.png',
+      'apple-touch-icon-32x32.png',
       'splash-startup.png'
       ])) {
 

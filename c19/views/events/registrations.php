@@ -13,14 +13,37 @@ namespace c19;
 use strings;
 
 $dto = $this->data->event;  ?>
-
 <h1 class="d-none d-print-block"><?= $this->title ?></h1>
 <div class="row">
   <div class="col text-truncate h5 m-0 pt-2"><?= $dto->description ?></div>
   <div class="col-2 text-right pl-0">
+    <?php if ( currentUser::isAdmin()) {  ?>
+      <button class="btn btn-light"
+        id="<?= $_uid = strings::rand() ?>">
+        <i class="fa fa-pencil"></i>
+
+      </button>
+      <script>
+      ( _ => {
+        $(document).ready( () => {
+          $('#<?= $_uid ?>').on( 'click', function( e) {
+            e.stopPropagation();e.preventDefault();
+
+            _.get.modal( _.url('<?= $this->route ?>/edit/<?= $dto->id ?>'))
+            .then( m => m.on( 'success', e => window.location.reload()));
+
+          });
+
+        });
+
+      }) (_brayworth_);
+      </script>
+
+    <?php } // if ( currentUser::isAdmin())  ?>
+
     <button class="btn btn-light"
-      id="<?= $_editor = strings::rand() ?>">
-      <i class="fa fa-pencil"></i>
+      id="<?= $_refresh = strings::rand() ?>">
+      <i class="fa fa-refresh"></i>
 
     </button>
 
@@ -65,6 +88,7 @@ $(document).ready( () => {
       e.stopPropagation();
 
       $('.spinner-grow', '#<?= $_registrations ?>heading').removeClass('d-none');
+      $('#<?= $_refresh ?> > .fa').addClass('fa-spin').prop( 'disabled', true);
       let url = _.url( '<?= $this->route ?>/attendees/<?= $dto->id ?>');
       // console.log( url);
 
@@ -74,11 +98,18 @@ $(document).ready( () => {
         }, 10000);
 
         $('.spinner-grow', '#<?= $_registrations ?>heading').addClass('d-none');
+        $('#<?= $_refresh ?> > .fa').removeClass('fa-spin');
 
       });
 
     })
     .trigger('get-attendees');
+
+    $('#<?= $_refresh ?>').on( 'click', function( e) {
+      e.stopPropagation();
+      $('#<?= $_registrations ?>').trigger('get-attendees');
+
+    });
 
     $(document).on( 'edit-attendee', ( e, id ) => {
       _.get.modal( _.url( '<?= $this->route ?>/editRegistration/' + id))
@@ -110,11 +141,31 @@ $(document).ready( () => {
 
     });
 
-    $('#<?= $_editor ?>').on( 'click', function( e) {
-      e.stopPropagation();e.preventDefault();
+    $(document).on( 'checkout-attendees', ( e, ids ) => {
+      // console.log( '<?= $this->route ?>', ids);
+      // return;
 
-      _.get.modal( _.url('<?= $this->route ?>/edit/<?= $dto->id ?>'))
-      .then( m => m.on( 'success', e => window.location.reload()));
+      if ( !ids) return;
+
+      _.post({
+        url : _.url('<?= $this->route ?>'),
+        data : {
+          action : 'checkout-attendees',
+          ids : ids
+
+        },
+
+      }).then( d => {
+        if ( 'ack' == d.response) {
+          $('#<?= $_registrations ?>').trigger('get-attendees');
+
+        }
+        else {
+          _.growl( d);
+
+        }
+
+      });
 
     });
 

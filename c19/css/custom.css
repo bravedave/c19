@@ -5,7 +5,7 @@ div[data-role="main-content-wrapper"] {
 }
 
 .nav.flex-column > .nav-item > .nav-link > .fa {
-	margin-left: -1.25rem; margin-right: 0.25rem; width: 1rem;
+	margin-left: -1rem; margin-right: 0.25rem; width: 1rem;
 
 }
 

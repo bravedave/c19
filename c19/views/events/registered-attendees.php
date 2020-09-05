@@ -34,15 +34,18 @@ use strings;  ?>
     <tbody>
     <?php
     $parties = 0;
+    $unchecked = 0;
     while ( $dto = $this->data->registrations->dto()) {
       if ( !$dto->parent) $parties += (int)$dto->party;
+      $checkedOut = strtotime( $dto->checkout) > 0 ? 'yes' : 'no';
       printf(
         '<tr data-checkout="%s" data-id="%d">',
-        strtotime( $dto->checkout) > 0 ? 'yes' : 'no',
+        $checkedOut,
         $dto->id
 
       );
 
+      if ( 'no' == $checkedOut) $unchecked++;
       print '<td class="small text-center" line-number>&nbsp;</td>';
 
       if ( config::$CHECKOUT) {
@@ -67,7 +70,21 @@ use strings;  ?>
 
     <tfoot>
       <tr>
-        <td class="text-muted font-italic small" colspan="4"><?= sprintf( 'updated : %s', date( 'c')) ?></td>
+        <td class="text-muted font-italic" colspan="4">
+          <?php if ( config::$CHECKOUT) {
+            $hide = 'd-none';
+            if ( time() > strtotime( $this->data->event->end)) {
+              if ( $unchecked && currentUser::isAdmin()) {
+                $hide = '';
+
+              }
+
+            } ?>
+            <button class="btn btn-sm btn-light <?= $hide ?>" id="<?= $_checkoutBtn = strings::rand()  ?>">checkout <?= $unchecked ?></button>
+
+          <?php } // if ( config::$CHECKOUT) { ?>
+
+        </td>
         <?php if ( config::$CHECKOUT) { ?>
         <td class="d-none d-sm-table-cell">&nbsp;</td>
         <?php } // if ( config::$CHECKOUT) { ?>
@@ -77,12 +94,19 @@ use strings;  ?>
 
       </tr>
 
+      <tr>
+        <td class="text-muted font-italic small" colspan="7"><?= sprintf( 'updated : %s', date( config::$DATETIME_FORMAT)) ?></td>
+        <?php if ( config::$CHECKOUT) { ?>
+        <td class="d-none d-sm-table-cell">&nbsp;</td>
+        <?php } // if ( config::$CHECKOUT) { ?>
+
+      </tr>
+
     </tfoot>
 
   </table>
 
 </div>
-
 <script>
 $(document).ready( () => {
 	$('#<?= $_table ?>')
@@ -99,59 +123,87 @@ $(document).ready( () => {
 	})
 	.trigger('update-row-numbers');
 
-  $('> tbody > tr', '#<?= $_table ?>').each( ( i, tr) => {
-    let _tr = $(tr);
-
-    _tr
-    .on('edit', function(e) {
-      let _tr = $(this);
-      let _data = _tr.data();
-
-      $(document).trigger( 'edit-attendee', _data.id);
-
-    })
-    .on( 'checkout', function( e) {
-      let _me = $(this);
-      let _data = _me.data();
-
-      $(document).trigger( 'checkout-attendee', _data.id);
-
-    })
-    .on( 'click', function( e) {
+  <?php if ( currentUser::isAdmin()) {  ?>
+    <?php if ( config::$CHECKOUT) { ?>
+    $('#<?= $_checkoutBtn ?>').on( 'click', function( e) {
       e.stopPropagation();e.preventDefault();
 
-      $(this).trigger('edit');
+      $('#<?= $_table ?>').trigger( 'checkout');
 
-    })
-    .on( 'contextmenu', function( e) {
-      if ( e.shiftKey)
-        return;
+    });
+    <?php } // if ( config::$CHECKOUT) ?>
 
-      e.stopPropagation();e.preventDefault();
+    $('#<?= $_table ?>').on( 'checkout', function( e) {
+      ids = [];
+      $('> tbody > tr[data-checkout="no"]', '#<?= $_table ?>').each( ( i, tr) => {
+        let _tr = $(tr);
+        let _data = _tr.data();
 
-      let _me = $(this);
-      let _data = _me.data();
+        ids.push( _data.id);
 
-      _brayworth_.hideContexts();
+      });
 
-      let _context = _brayworth_.context();
-
-      if ( 'no' == _data.checkout) {
-        _context.append( $('<a href="#">checkout</a>').on( 'click', function( e) {
-          e.stopPropagation();e.preventDefault();
-
-          _me.trigger( 'checkout');
-          _context.close();
-
-        }));
-
-      }
-
-      if ( _context.length > 0) _context.open( e);
+      // console.log( ids);
+      $(document).trigger( 'checkout-attendees', ids.join(','));
 
     });
 
-  });
+    $('> tbody > tr', '#<?= $_table ?>').each( ( i, tr) => {
+      let _tr = $(tr);
+
+      _tr
+      .addClass( 'pointer')
+      .on('edit', function(e) {
+        let _tr = $(this);
+        let _data = _tr.data();
+
+        $(document).trigger( 'edit-attendee', _data.id);
+
+      })
+      .on( 'checkout', function( e) {
+        let _me = $(this);
+        let _data = _me.data();
+
+        $(document).trigger( 'checkout-attendee', _data.id);
+
+      })
+      .on( 'click', function( e) {
+        e.stopPropagation();e.preventDefault();
+
+        $(this).trigger('edit');
+
+      })
+      .on( 'contextmenu', function( e) {
+        if ( e.shiftKey)
+          return;
+
+        e.stopPropagation();e.preventDefault();
+
+        let _me = $(this);
+        let _data = _me.data();
+
+        _brayworth_.hideContexts();
+
+        let _context = _brayworth_.context();
+
+        if ( 'no' == _data.checkout) {
+          _context.append( $('<a href="#">checkout</a>').on( 'click', function( e) {
+            e.stopPropagation();e.preventDefault();
+
+            _me.trigger( 'checkout');
+            _context.close();
+
+          }));
+
+        }
+
+        if ( _context.length > 0) _context.open( e);
+
+      });
+
+    });
+
+  <?php } // if ( currentUser::isAdmin()) ?>
 
 });
 </script>

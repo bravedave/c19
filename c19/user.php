@@ -42,6 +42,13 @@ class user extends dvc\user {
 
 		return ( $this->id > 0);
 
+  }
+
+  public function isadmin() {
+		return ( $this->admin);
+
 	}
+
+
 
 }

@@ -13,38 +13,36 @@ namespace c19;
 use strings;    ?>
 
 <nav class="nav flex-column">
+  <div class="nav-item">
+    <a class="nav-link" href="<?= strings::url( 'events') ?>"><i class="fa fa-calendar"></i>events</a>
+
+  </div>
+
+  <?php if ( currentUser::isAdmin()) {  ?>
     <div class="nav-item">
-        <a class="nav-link" href="<?= strings::url( 'events') ?>">events</a>
+      <a class="nav-link" href="<?= strings::url( 'users') ?>"><i class="fa fa-users"></i>users</a>
 
     </div>
 
     <div class="nav-item">
-        <a class="nav-link" href="<?= strings::url( 'users') ?>">users</a>
+      <a class="nav-link" href="#" id="<?= $_settings = strings::rand() ?>"><i class="fa fa-cog"></i>settings</a>
 
     </div>
+    <script>
+    $(document).ready( () => {
+      $('#<?= $_settings ?>').on( 'click', e => {
+        e.stopPropagation();e.preventDefault();
 
-    <div class="nav-item">
-        <a class="nav-link" href="#" id="<?= $_settings = strings::rand() ?>">settings</a>
+        ( _ => {
+          _.get.modal(_.url('<?= $this->route ?>/settings'));
 
-    </div>
+        }) (_brayworth_);
 
-    <div class="nav-item">
-        <a class="nav-link" href="<?= strings::url( 'logout') ?>">logoff</a>
+      })
 
-    </div>
+    });
+    </script>
+
+  <?php } ?>
 
 </nav>
-<script>
-$(document).ready( () => {
-  $('#<?= $_settings ?>').on( 'click', function( e) {
-    e.stopPropagation();e.preventDefault();
-
-    ( _ => {
-      _.get.modal(_.url('<?= $this->route ?>/settings'));
-
-    }) (_brayworth_);
-
-  })
-
-});
-</script>

@@ -57,7 +57,7 @@ $dto = $this->data->dto;    ?>
 
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-row">
                           <div class="col-md-6">
                             <label for="<?= $uid = strings::rand() ?>" class="my-0">Start</label>
                             <input class="form-control" type="datetime-local" name="start" required

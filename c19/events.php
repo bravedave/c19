@@ -42,6 +42,24 @@ class events extends controller {
       } else { Json::nak( sprintf( 'invalid id : %s', $action)); }
 
 		}
+		elseif ( 'checkout-attendees' == $action) {
+      if ( $ids = $this->getPost( 'ids')) {
+        if ( $ids = explode( ',', $ids)) {
+          $dao = new dao\registrations;
+          foreach ($ids as $id) {
+            if ( $dto = $dao->getByID( $id)) {
+              $dao->checkOutParty( $dto);
+              # code...
+            }
+
+          }
+          Json::ack( $action);
+
+        } else { Json::nak( sprintf( 'invalid ids : %s', $action)); }
+
+      } else { Json::nak( sprintf( 'invalid ids : %s', $action)); }
+
+		}
 		elseif ( 'save-events' == $action) {
 			$a = [
 				'updated' => \db::dbTimeStamp(),
@@ -118,9 +136,13 @@ class events extends controller {
 
     $secondary = [
       'events/index-title',
-      'events/index-up',
 
     ];
+
+    if ( currentUser::isAdmin()) {
+      $secondary[] = 'events/index-up';
+
+    }
 
 		$this->render(
 			[
@@ -138,6 +160,7 @@ class events extends controller {
     if ( $id = (int)$id) {
       $dao = new dao\events;
       $this->data = (object)[
+        'event' => $dao->getByID( $id),
         'registrations' => $dao->getRegistrationsForEvent( $id)
 
       ];
@@ -202,15 +225,21 @@ class events extends controller {
       $dao = new dao\events;
       $this->data = (object)[
         'title' => $this->title = 'Registrations',
-        'event' => $dao->getByID( $id)
+        'event' => $dao->getByID( $id),
+        'openevents' => $dao->getOpenEvents()
 
       ];
 
       $secondary = [
         'events/index-title',
-        'events/index-up',
+        'events/index-open-events',
 
       ];
+
+      if ( currentUser::isAdmin()) {
+        $secondary[] = 'events/index-up';
+
+      }
 
       $this->render([
         'title' => $this->title = $this->label,

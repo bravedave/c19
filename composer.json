@@ -12,9 +12,9 @@
     ],
     "require": {
         "bravedave/dvc": "^2.1",
-        "bravedave/green": "^1.0",
         "matthiasmullie/scrapbook": "^1.4",
-        "bacon/bacon-qr-code": "^2.0"
+        "bacon/bacon-qr-code": "^2.0",
+        "bravedave/green": "^1.1"
     },
     "autoload": {
         "psr-4": {
