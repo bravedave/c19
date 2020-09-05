@@ -14,7 +14,7 @@ use sys;
 use dvc;
 
 class config extends dvc\config {
-  const c19_db_version = 0.45;
+  const c19_db_version = 0.46;
 
 	const allow_password_recovery = true;
   const use_inline_logon = true;

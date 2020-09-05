@@ -25,6 +25,7 @@ if ( $res = $this->db->Result( 'SELECT count(*) count FROM users' )) {
 				'name' => 'Administrator',
 				'password' => password_hash( 'admin', PASSWORD_DEFAULT),
 				'active' => 1,
+				'admin' => 1,
 				'created' => \db::dbTimeStamp(),
 				'updated' => \db::dbTimeStamp()
 
@@ -35,6 +36,27 @@ if ( $res = $this->db->Result( 'SELECT count(*) count FROM users' )) {
 		}
 		else {
 			\sys::logger( sprintf( 'there are %d user(s)', $dto->count));
+
+		}
+
+	}
+
+}
+
+if ( $res = $this->db->Result( 'SELECT count(*) count FROM users WHERE username = "nippers"' )) {
+	if ( $dto = $res->dto()) {
+		if ( $dto->count < 1 ) {
+			$a = [
+				'username' => 'nippers',
+				'name' => 'Nippers',
+				'password' => password_hash( 'nippers', PASSWORD_DEFAULT),
+				'active' => 1,
+				'created' => \db::dbTimeStamp(),
+				'updated' => \db::dbTimeStamp()
+
+			];
+			$this->db->Insert( 'users', $a );
+			\sys::logger( 'wrote nipper users');
 
 		}
 
