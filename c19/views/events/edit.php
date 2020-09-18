@@ -111,14 +111,17 @@ $dto = $this->data->dto;    ?>
             $('input[name="start"]', '#<?= $_form ?>').prop( 'required', false);
             $('input[name="end"]', '#<?= $_form ?>').prop( 'required', false);
 
-            $('input[name="start"]', '#<?= $_form ?>').closest( '.row').addClass( 'd-none');
+            $('input[name="start"]', '#<?= $_form ?>').val( '');
+            $('input[name="end"]', '#<?= $_form ?>').val( '');
+
+            $('input[name="start"]', '#<?= $_form ?>').closest( '.form-row').addClass( 'd-none');
 
           }
           else {
             $('input[name="start"]', '#<?= $_form ?>').prop( 'required', true);
             $('input[name="end"]', '#<?= $_form ?>').prop( 'required', true);
 
-            $('input[name="start"]', '#<?= $_form ?>').closest( '.row').removeClass( 'd-none');
+            $('input[name="start"]', '#<?= $_form ?>').closest( '.form-row').removeClass( 'd-none');
 
           }
 
