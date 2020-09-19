@@ -29,7 +29,16 @@ use strings;  ?>
           <div class="modal-body">
             <div class="form-group row">
               <div class="col">
-                <label for="<?= $_uid = strings::rand() ?>">Registration TTL</label>
+                <label class="text-muted">Text appears on qr-code printout</label>
+                <textarea class="form-control text-center" name="qr_footer" rows="4"><?= config::qrFooter() ?></textarea>
+
+              </div>
+
+            </div>
+
+            <div class="form-group row">
+              <div class="col">
+                <label class="text-muted" for="<?= $_uid = strings::rand() ?>">Registration TTL</label>
                 <div class="input-group">
                   <input type="text" name="registration_ttl" class="form-control" required
                     id="<?= $_uid ?>"

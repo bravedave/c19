@@ -152,6 +152,7 @@ class controller extends dvc\Controller {
       }
 
       config::c19_checkout( (int)$this->getPost( 'checkout'));
+      config::qrFooter( (string)$this->getPost( 'qr_footer'));
 
       Json::ack( $action);
 

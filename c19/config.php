@@ -25,6 +25,7 @@ class config extends dvc\config {
 
 	static $WEBNAME = 'Attendance Checking';
 
+  static protected $_QR_FOOTER = "COVID-19\nAttendance Register\n\nScan QR Code with your smartphone camera and register your attendance at this venue\n\nScan again to checkout";
   static protected $_REGISTRATION_TTL = 2419200; // 28 * 24 * 60 * 60
   static protected $_REGISTRATION_PURGE = 0;   // the last time the client info was purged
   static protected $_C19_VERSION = 0;
@@ -129,6 +130,7 @@ class config extends dvc\config {
 			if ( !isset($j->registration_ttl) || $j->registration_ttl != $set) {
         self::$_REGISTRATION_PURGE = $j->registration_ttl = $set;
         file_put_contents( $config, json_encode( $j, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+        \sys::logger( sprintf('<updated registration ttl> %s', __METHOD__));
 
       }
 
@@ -139,7 +141,7 @@ class config extends dvc\config {
   }
 
   static function c19_checkout( $set = null) {
-    $ret = self::$_REGISTRATION_TTL;
+    $ret = self::$CHECKOUT;
 
     $config = self::c19_config();
 
@@ -150,6 +152,7 @@ class config extends dvc\config {
     if ( !isset($j->checkout) || $j->checkout != $set) {
       self::$CHECKOUT = $j->checkout = (bool)$set;
       file_put_contents( $config, json_encode( $j, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+      \sys::logger( sprintf('<updated checkout> %s', __METHOD__));
 
     }
 
@@ -164,7 +167,8 @@ class config extends dvc\config {
 			'registration_ttl' => self::$_REGISTRATION_TTL,
 			'registration_purge' => self::$_REGISTRATION_PURGE,
       'require_authorization' => false,
-      'checkout' => self::$CHECKOUT
+      'checkout' => self::$CHECKOUT,
+      'qr_footer' => self::$_QR_FOOTER
 
 		];
 
@@ -177,15 +181,13 @@ class config extends dvc\config {
 			self::$_REGISTRATION_PURGE = $a->registration_purge;
 			self::$REQUIRE_AUTHORIZATION = (bool)$a->require_authorization;
 			self::$CHECKOUT = (bool)$a->checkout;
+			self::$_QR_FOOTER = (string)$a->qr_footer;
 
 		}
 
 		if( extension_loaded('apcu') && ini_get('apc.enabled') && ( php_sapi_name() != 'cli' || ini_get('apc.enable_cli'))) {
-      //~ \sys::logger( 'APC enabled!');
       if ( \class_exists('MatthiasMullie\Scrapbook\Adapters\Apc')) {
         self::$DB_CACHE = 'APC';	// values = 'APC'
-        //~ self::$DB_CACHE_TTL = 40;
-        // self::$DB_CACHE_DEBUG = true;
         self::$DB_CACHE_DEBUG_FLUSH = true;
 
       }
@@ -197,7 +199,30 @@ class config extends dvc\config {
 
 		}
 
-	}
+  }
+
+  static function qrFooter( $set = null) {
+    $ret = self::$_QR_FOOTER;
+
+    if ( !\is_null( $set)) {
+      $config = self::c19_config();
+
+      $j = file_exists( $config) ?
+        json_decode( file_get_contents( $config)):
+        (object)[];
+
+      if ( !isset($j->qr_footer) || $j->qr_footer != $set) {
+        self::$_QR_FOOTER = $j->qr_footer = (string)$set;
+        file_put_contents( $config, json_encode( $j, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+        \sys::logger( sprintf('<updated qrFooter> %s', __METHOD__));
+
+      }
+
+    }
+
+    return $ret;
+
+  }
 
 }
 
