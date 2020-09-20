@@ -140,50 +140,27 @@ class controller extends dvc\Controller {
 
   }
 
-  protected function postHandler() {
-    $action = $this->getPost( 'action');
-
-    if ( 'save-settings' == $action) {
-      $registration_ttl = (int)$this->getPost( 'registration_ttl');
-
-      if ( $registration_ttl > 0) {
-        config::c19_registration_ttl( $registration_ttl);
-
-      }
-
-      config::c19_checkout( (int)$this->getPost( 'checkout'));
-      config::qrFooter( (string)$this->getPost( 'qr_footer'));
-
-      Json::ack( $action);
+  public function __construct($rootPath) {
+    // \sys::logger( sprintf('<%s> %s', get_class($this), __METHOD__));
+    if ( \in_array( get_class($this),[
+        'assets',
+        'home',
+        'c19\recover'
+    ])) {
+        $this->RequireValidation = false;
 
     }
     else {
-      parent::postHander();
+        $this->RequireValidation = config::$REQUIRE_AUTHORIZATION;
 
     }
-  }
 
-  public function __construct($rootPath) {
-      // \sys::logger( sprintf('<%s> %s', get_class($this), __METHOD__));
-      if ( \in_array( get_class($this),[
-          'assets',
-          'home',
-          'c19\recover'
-      ])) {
-          $this->RequireValidation = false;
+    config::c19_checkdatabase();
+    parent::__construct($rootPath);
 
-      }
-      else {
-          $this->RequireValidation = config::$REQUIRE_AUTHORIZATION;
+    self::application()->addPath( __DIR__ );
 
-      }
-
-      config::c19_checkdatabase();
-      parent::__construct($rootPath);
-
-      self::application()->addPath( __DIR__ );
-
-      $this->title = config::$WEBNAME;
+    $this->title = config::$WEBNAME;
 
   }
 
@@ -271,11 +248,6 @@ class controller extends dvc\Controller {
       }
 
     }
-
-  }
-
-  public function settings() {
-    $this->load( 'settings');
 
   }
 

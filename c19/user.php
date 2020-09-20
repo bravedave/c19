@@ -28,6 +28,7 @@ class user extends dvc\user {
 				$this->name = $this->dto->name;
 				$this->email = $this->dto->email;
 				$this->admin = $this->dto->admin;
+				$this->programmer = $this->dto->programmer;
 
 			}
 

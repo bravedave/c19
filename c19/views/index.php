@@ -45,4 +45,12 @@ use strings;    ?>
 
   <?php } ?>
 
+  <?php if ( currentUser::isProgrammer()) {  ?>
+    <div class="nav-item">
+      <a class="nav-link" href="<?= strings::url( 'admin/dbdownload') ?>"><i class="fa fa-database"></i>DB Download</a>
+
+    </div>
+
+  <?php } ?>
+
 </nav>

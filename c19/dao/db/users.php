@@ -13,6 +13,7 @@ namespace dao;
 $dbc = \sys::dbCheck( 'users');
 
 $dbc->defineField( 'username', 'varchar');
+$dbc->defineField( 'programmer', 'tinyint');
 $dbc->defineField( 'reset_guid', 'varchar');
 $dbc->defineField( 'reset_guid_date', 'datetime');
 $dbc->check();

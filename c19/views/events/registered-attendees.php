@@ -49,12 +49,12 @@ use strings;  ?>
       print '<td class="small text-center" line-number>&nbsp;</td>';
 
       if ( config::$CHECKOUT) {
-        printf( '<td>%s<div class="d-sm-none small">%s</div></td>', strings::asShortDate( $dto->created, $time = true), strings::asShortDate( $dto->checkout, $time = true));
-        printf( '<td class="d-none d-sm-table-cell">%s</td>', strings::asShortDate( $dto->checkout, $time = true));
+        printf( '<td>%s<div class="d-sm-none small">%s</div></td>', strings::asLocalDate( $dto->created, $time = true), strings::asLocalDate( $dto->checkout, $time = true));
+        printf( '<td class="d-none d-sm-table-cell">%s</td>', strings::asLocalDate( $dto->checkout, $time = true));
 
       }
       else {
-        printf( '<td>%s</td>', strings::asShortDate( $dto->created, $time = true));
+        printf( '<td>%s</td>', strings::asLocalDate( $dto->created, $time = true));
 
       }
       printf( '<td>%s<div class="d-md-none small">%s</div></td>', $dto->name, $dto->phone);

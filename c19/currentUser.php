@@ -11,4 +11,15 @@
 
 namespace c19;
 
-class currentUser extends \currentUser {}
+class currentUser extends \currentUser {
+	static public function isProgrammer() {
+		if ( isset( self::user()->programmer)) {
+			return ( self::user()->programmer == 1 );
+
+		}
+
+		return ( self::isAdmin());
+
+	}
+
+}
