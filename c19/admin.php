@@ -11,6 +11,8 @@
 
 namespace c19;
 
+use sys;
+
 class admin extends controller {
   protected function postHandler() {
     $action = $this->getPost( 'action');
