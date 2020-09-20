@@ -9,6 +9,10 @@
  * styleguide : https://codeguide.co/
 */  ?>
 
+<style>
+[data-role="content-secondary"] .qr-about { display: none; }
+</style>
+
 <style media="print">
 footer { display: none; }
 </style>
@@ -29,7 +33,7 @@ footer { display: none; }
 
 </div>
 
-<div class="row mt-4">
-  <div class="offset-2 col-8 text-center h4"><?= strings::text2html( config::qrFooter()) ?></div>
+<div class="row mt-4 qr-about">
+  <div class="offset-2 col-8 text-center h2"><?= strings::text2html( config::qrFooter()) ?></div>
 
 </div>
