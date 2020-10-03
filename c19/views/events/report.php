@@ -13,13 +13,22 @@ namespace c19;
 use strings;  ?>
 
 <h1 class="d-none d-print-block"><?= $this->title ?></h1>
-<table class="table" id="<?= $_table = strings::rand() ?>">
+<table class="table table-sm" id="<?= $_table = strings::rand() ?>">
 	<thead class="small">
 		<tr>
 			<td class="text-center">#</td>
 			<td>Description</td>
 			<td>Duration</td>
-			<td class="text-center">Attendees</td>
+			<td class="text-center position-relative">
+        Attendees
+        <?php if ( currentUser::isAdmin()) {  ?>
+          <button type="button" class="btn btn-light btn-sm position-absolute"
+            style="top: -.75rem; right: -.75rem;"
+            data-role="add-button"><i class="fa fa-plus"></i></a>
+
+        <?php } ?>
+
+      </td>
 
 		</tr>
 
@@ -60,7 +69,8 @@ use strings;  ?>
     <tfoot class="d-print-none">
       <tr>
         <td colspan="4" class="text-right">
-          <button type="button" class="btn btn-outline-secondary" id="<?= $addBtn = strings::rand() ?>"><i class="fa fa-plus"></i></a>
+          <button type="button" class="btn btn-outline-secondary"
+            data-role="add-button"><i class="fa fa-plus"></i></a>
 
         </td>
 
@@ -107,7 +117,8 @@ use strings;  ?>
     .trigger('update-row-numbers');
 
     <?php if ( currentUser::isAdmin()) {  ?>
-    $('#<?= $addBtn ?>').on( 'click', e => { $(document).trigger( 'add-events'); });
+    $('button[data-role="add-button"]', '#<?= $_table ?>')
+    .on( 'click', e => $(document).trigger( 'add-events'));
     <?php } // if ( currentUser::isAdmin()) ?>
 
     $('#<?= $_table ?> > tbody > tr').each( ( i, tr) => {
@@ -178,6 +189,17 @@ use strings;  ?>
           }) (_brayworth_);
 
         })
+        .on( 'copy', function(e) {
+          let _tr = $(this);
+          let _data = _tr.data();
+
+          ( _ => {
+            _.get.modal( _.url('<?= $this->route ?>/edit/' + _data.id + '/copy'))
+            .then( m => m.on( 'success', e => window.location.reload()));
+
+          })( _brayworth_);
+
+        })
         .on( 'edit', function(e) {
           let _tr = $(this);
           let _data = _tr.data();
@@ -211,27 +233,39 @@ use strings;  ?>
 
           }));
 
-          _context.append( $('<a href="#">edit</a>').on( 'click', function( e) {
-            e.stopPropagation();e.preventDefault();
-
-            _context.close();
-
-            _tr.trigger( 'edit');
-
-          }));
-
-          // console.log( _data.tot);
-          if ( Number( _data.tot) == 0) {
-            _context.append( $('<a href="#"><i class="fa fa-trash"></i>delete</a>').on( 'click', function( e) {
+          <?php if ( currentUser::isAdmin()) {  ?>
+            _context.append( $('<a href="#">edit</a>').on( 'click', function( e) {
               e.stopPropagation();e.preventDefault();
 
               _context.close();
 
-              _tr.trigger( 'delete');
+              _tr.trigger( 'edit');
 
             }));
 
-          }
+            _context.append( $('<a href="#"><i class="fa fa-copy"></i>copy</a>').on( 'click', function( e) {
+              e.stopPropagation();e.preventDefault();
+
+              _context.close();
+
+              _tr.trigger( 'copy');
+
+            }));
+
+            // console.log( _data.tot);
+            if ( Number( _data.tot) == 0) {
+              _context.append( $('<a href="#"><i class="fa fa-trash"></i>delete</a>').on( 'click', function( e) {
+                e.stopPropagation();e.preventDefault();
+
+                _context.close();
+
+                _tr.trigger( 'delete');
+
+              }));
+
+            }
+
+          <?php } // if ( currentUser::isAdmin())  ?>
 
           _context.open( e);
 

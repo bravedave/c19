@@ -12,6 +12,7 @@
 namespace c19;
 
 use strings;
+use sys;
 
 $dto = $this->data->dto;  ?>
 
@@ -39,6 +40,50 @@ $dto = $this->data->dto;  ?>
               </div>
 
             </div>
+
+            <?php
+            $dao = new dao\events;
+            if ( $events = $dao->otherPossibleEvents( $dto)) {  ?>
+              <div class="form-group row">
+                <div class="col">
+                  <?php
+                  // sys::dump( $events, null, false);
+                  foreach ($events as $event) {
+                    $description = $event->description;
+                    if ( !$event->open) {
+                      $description = sprintf(
+                        '%s <small>%s - %s</small>',
+                        $event->description,
+                        strings::asLocalDate( $event->start, $time = true),
+                        strings::asLocalDate( $event->end, $time = true)
+
+                      );
+
+                    }
+                    printf(
+                      '<div class="form-check">
+                        <input type="radio" class="form-check-input" name="event"
+                          value="%s" id="%s" %s>
+
+                        <label class="form-check-label" for="%s">%s</label>
+
+                      </div>',
+                      $event->id,
+                      $_uid = strings::rand(),
+                      $event->id == $dto->event ? 'checked' : '',
+                      $_uid,
+                      $description
+
+                    );
+
+                  } ?>
+
+                </div>
+
+              </div>
+
+            <?php
+            } ?>
 
             <?php if ( !( strtotime( $dto->checkout) > 0)) {  ?>
               <div class="form-group row">

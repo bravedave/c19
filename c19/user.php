@@ -29,19 +29,8 @@ class user extends dvc\user {
 				$this->name = $this->dto->name;
 				$this->email = $this->dto->email;
         $this->admin = $this->dto->admin;
-        // $this->programmer = 0;
         if ( isset($this->dto->programmer)) {
           $this->programmer = $this->dto->programmer;
-          \sys::logger(
-            sprintf(
-              '<%s %s> %s',
-              $this->id,
-              $this->programmer ? 'programmer' : 'not programmer',
-              __METHOD__
-
-            )
-
-          );
 
         }
 

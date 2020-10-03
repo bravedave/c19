@@ -68,6 +68,23 @@ class events extends _dao {
 
   }
 
+  public function otherPossibleEvents( dto\registrations $dto) : array {
+    $sql = sprintf(
+      'SELECT * FROM `events` WHERE `open` = 1 OR "%s" BETWEEN `start` AND `end`',
+      $dto->created
+
+    );
+    // \sys::logger( sprintf('<%s> %s', $sql, __METHOD__));
+
+    if ( $res = $this->Result( $sql)) {
+      return $this->dtoSet( $res);
+
+    }
+
+    return [];
+
+  }
+
   public function purge( $ttl) {
     $dead_date = date( 'Y-m-d H:i:s', time() - $ttl);
     $sql = sprintf( 'SELECT

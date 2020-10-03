@@ -103,6 +103,11 @@ class events extends controller {
 
       ];
 
+      if ( $event = (int)$this->getPost( 'event')) {
+        $a['event'] = $event;
+
+      }
+
 			if ( ( $id = (int)$this->getPost('id')) > 0 ) {
         $dao = new dao\registrations;
         if ( $dto = $dao->getByID( $id)) {
@@ -171,7 +176,7 @@ class events extends controller {
 
   }
 
-	public function edit( $id = 0) {
+	public function edit( $id = 0, $mode = '') {
 		$this->data = (object)[
 			'title' => $this->title = 'Add Event',
 			'dto' => new dao\dto\events
@@ -182,7 +187,14 @@ class events extends controller {
 			$dao = new dao\events;
 			if ( $dto = $dao->getByID( $id)) {
 
-				$this->data->title = $this->title = 'Edit Event';
+        if ( 'copy' == $mode) {
+          $dto->id = 0;
+
+        }
+        else {
+          $this->data->title = $this->title = 'Edit Event';
+
+        }
 				$this->data->dto = $dto;
 				$this->load('events/edit');
 

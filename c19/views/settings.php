@@ -30,7 +30,7 @@ use strings;  ?>
             <div class="form-group row">
               <div class="col">
                 <label class="text-muted">Text appears on qr-code printout</label>
-                <textarea class="form-control text-center" name="qr_footer" rows="4"><?= config::qrFooter() ?></textarea>
+                <textarea class="form-control text-center" name="qr_footer" rows="6"><?= config::qrFooter() ?></textarea>
 
               </div>
 

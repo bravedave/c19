@@ -58,7 +58,7 @@ $dto = $this->data->dto;    ?>
                         </div>
 
                         <div class="form-row">
-                          <div class="col-md-6">
+                          <div class="col-lg-6">
                             <label for="<?= $uid = strings::rand() ?>" class="my-0">Start</label>
                             <input class="form-control" type="datetime-local" name="start" required
                                 value="<?php
@@ -70,7 +70,7 @@ $dto = $this->data->dto;    ?>
 
                           </div>
 
-                          <div class="col-md-6 mt-3 mt-md-0">
+                          <div class="col-lg-6 mt-3 mt-lg-0">
                             <label for="<?= $uid = strings::rand() ?>" class="my-0">End</label>
                             <input class="form-control" type="datetime-local" name="end" required
                                 value="<?php
