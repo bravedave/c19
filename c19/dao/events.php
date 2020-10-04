@@ -30,6 +30,34 @@ class events extends _dao {
           ON regs.`event` = `events`.`id`
       ORDER BY `id` DESC';
 
+    $sql = 'SELECT
+        `events`.*,
+        `recent`.`latest`,
+        `regs`.`tot`
+      FROM
+        `events`
+        LEFT JOIN
+          (SELECT
+            `event`,
+            count(*) `tot`
+          FROM
+            `registrations`
+          GROUP BY `event`) `regs`
+          ON regs.`event` = `events`.`id`
+        LEFT JOIN
+          (SELECT
+            `event`,
+            MAX( `created`) `latest`
+          FROM
+            `registrations`
+          GROUP BY `event`) `recent`
+          ON `recent`.`event` = `events`.`id`
+      ORDER BY
+        CASE
+        WHEN `latest` IS NULL THEN `start`
+        ELSE `latest`
+        END DESC';
+
     // \sys::logSQL( $sql);
 
     return $this->Result( $sql);

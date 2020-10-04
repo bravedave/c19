@@ -19,6 +19,7 @@ use strings;  ?>
 			<td class="text-center">#</td>
 			<td>Description</td>
 			<td>Duration</td>
+			<td class="text-center">Last</td>
 			<td class="text-center position-relative">
         Attendees
         <?php if ( currentUser::isAdmin()) {  ?>
@@ -58,6 +59,7 @@ use strings;  ?>
         strings::asLocalDate( $dto->end, $time = true));
 
     }
+		printf( '<td class="text-center">%s</td>', strings::asLocalDate( $dto->latest, $time = true));
 		printf( '<td class="text-center">%s</td>', $dto->tot);
 
     print '</tr>';
@@ -68,7 +70,7 @@ use strings;  ?>
   <?php if ( currentUser::isAdmin()) {  ?>
     <tfoot class="d-print-none">
       <tr>
-        <td colspan="4" class="text-right">
+        <td colspan="5" class="text-right">
           <button type="button" class="btn btn-outline-secondary"
             data-role="add-button"><i class="fa fa-plus"></i></a>
 
