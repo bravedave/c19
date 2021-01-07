@@ -14,10 +14,13 @@ use sys;
 use dvc;
 
 class config extends dvc\config {
-  const c19_db_version = 0.47;
+  const c19_db_version = 0.48;
 
 	const allow_password_recovery = true;
   const use_inline_logon = true;
+
+  const registrations_type_auto = 0;
+  const registrations_type_manual = 1;
 
 	static $CHECKOUT = false;
   static $CLIENT_TITLE = 'Bilinga Check In';

@@ -25,7 +25,7 @@ use strings;  ?>
         <?php if ( currentUser::isAdmin()) {  ?>
           <button type="button" class="btn btn-light btn-sm position-absolute"
             style="top: -.75rem; right: -.75rem;"
-            data-role="add-button"><i class="fa fa-plus"></i></a>
+            data-role="add-button"><i class="bi bi-plus bi-2x"></i></a>
 
         <?php } ?>
 
@@ -72,7 +72,7 @@ use strings;  ?>
       <tr>
         <td colspan="5" class="text-right">
           <button type="button" class="btn btn-outline-secondary"
-            data-role="add-button"><i class="fa fa-plus"></i></a>
+            data-role="add-button"><i class="bi bi-plus bi-2x"></i></a>
 
         </td>
 
@@ -236,7 +236,7 @@ use strings;  ?>
           }));
 
           <?php if ( currentUser::isAdmin()) {  ?>
-            _context.append( $('<a href="#">edit</a>').on( 'click', function( e) {
+            _context.append( $('<a href="#"><i class="bi bi-pencil"></i>edit</a>').on( 'click', function( e) {
               e.stopPropagation();e.preventDefault();
 
               _context.close();
@@ -245,7 +245,7 @@ use strings;  ?>
 
             }));
 
-            _context.append( $('<a href="#"><i class="fa fa-copy"></i>copy</a>').on( 'click', function( e) {
+            _context.append( $('<a href="#"><i class="bi bi-file-plus"></i>copy</a>').on( 'click', function( e) {
               e.stopPropagation();e.preventDefault();
 
               _context.close();
@@ -256,7 +256,7 @@ use strings;  ?>
 
             // console.log( _data.tot);
             if ( Number( _data.tot) == 0) {
-              _context.append( $('<a href="#"><i class="fa fa-trash"></i>delete</a>').on( 'click', function( e) {
+              _context.append( $('<a href="#"><i class="bi bi-trash"></i>delete</a>').on( 'click', function( e) {
                 e.stopPropagation();e.preventDefault();
 
                 _context.close();

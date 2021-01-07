@@ -41,7 +41,7 @@ use dvc;    ?>
       <li class="nav-item d-md-none">
         <a class="nav-link" href="<?= strings::url( 'events') ?>">
           <?= dvc\icon::get( dvc\icon::calendar_event ) ?>
-          <i class="fa"></i>events
+          events
 
         </a>
 
@@ -87,7 +87,7 @@ use dvc;    ?>
 
       <?php if ( config::$REQUIRE_AUTHORIZATION) {  ?>
       <li class="nav-item d-none d-md-list-item">
-        <a class="nav-link" title="logout" href="<?= strings::url( 'logout') ?>"><i class="fa fa-times"></i></a>
+        <a class="nav-link" title="logout" href="<?= strings::url( 'logout') ?>"><i class="bi bi-x bi-2x"></i></a>
 
       </li>
 

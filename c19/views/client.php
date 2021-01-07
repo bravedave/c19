@@ -68,7 +68,7 @@ use strings; ?>
     <div class="offset-lg-4 col-lg-4">
       <div class="input-group">
         <div class="input-group-prepend">
-          <div class="input-group-text"><i class="fa fa-phone"></i></div>
+          <div class="input-group-text"><i class="bi bi-telephone"></i></div>
         </div>
 
         <input type="tel" class="form-control" name="phone" placeholder="0417000000" required
@@ -85,7 +85,7 @@ use strings; ?>
       <label for="<?= $_uid = strings::rand() ?>">Address</label>
       <div class="input-group">
         <div class="input-group-prepend">
-          <div class="input-group-text"><i class="fa fa-at"></i></div>
+          <div class="input-group-text"><i class="bi bi-at"></i></div>
         </div>
 
         <input type="text" class="form-control" name="address" placeholder="@" required
@@ -129,7 +129,7 @@ use strings; ?>
 
       <div class="row">
         <div class="col text-right">
-          <button type="button" class="btn btn-light" id="<?= $_party ?>btn"><i class="fa fa-plus"></i></button>
+          <button type="button" class="btn btn-light" id="<?= $_party ?>btn"><i class="bi bi-plus bi-2x"></i></button>
 
         </div>
 
@@ -233,7 +233,7 @@ $(document).ready( () => {
       let row = $('<div class="form-group row"></div>').appendTo(familyContainer);
       let col = $('<div class="col"></div>').appendTo( row);
       let ig = $('<div class="input-group"></div>').appendTo( col);
-      let del = $('<button type="button" class="btn btn-light input-group-text"><i class="fa fa-minus text-danger"></i></button>')
+      let del = $('<button type="button" class="btn btn-light input-group-text"><i class="bi bi-minus text-danger"></i></button>')
       ig.append( '<div class="input-group-prepend"><div class="input-group-text">' + ++kids + '</div></div>')
       ig.append( '<input type="text" class="form-control" name="family[]" placeholder="full name" required pattern="[a-zA-Z0-9].*" />');
       ig.append( $('<div class="input-group-append"></div>').append(del))

@@ -77,7 +77,7 @@ use strings;  ?>
                   <strong>Checkout</strong> will succeed if
                   <ul>
                     <li>The browser is <strong>NOT</strong> in private
-                      <sup><a href="https://support.apple.com/en-us/HT203036" target="_blank" rel="noreferrer"><i class="fa fa-external-link"></i></a></sup>
+                      <sup><a href="https://support.apple.com/en-us/HT203036" target="_blank" rel="noreferrer"><i class="bi bi-box-arrow-up-right"></i></a></sup>
                       mode</li>
                     <li><strong>AND</strong> the user returns to the app on the <strong>same date</strong></li>
 

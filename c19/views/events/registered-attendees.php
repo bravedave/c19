@@ -26,6 +26,7 @@ use strings;  ?>
         <td class="text-center">Family</td>
         <td class="d-none d-md-table-cell">Mobile</td>
         <td class="d-none d-lg-table-cell">Address</td>
+        <td class="d-none d-xl-table-cell text-center" title="Manual Addition">M</td>
 
       </tr>
 
@@ -34,9 +35,11 @@ use strings;  ?>
     <tbody>
     <?php
     $parties = 0;
+    $manual = 0;
     $unchecked = 0;
     while ( $dto = $this->data->registrations->dto()) {
       if ( !$dto->parent) $parties += (int)$dto->party;
+      if ( config::registrations_type_manual == $dto->type) $manual++;
       $checkedOut = strtotime( $dto->checkout) > 0 ? 'yes' : 'no';
       printf(
         '<tr data-checkout="%s" data-id="%d">',
@@ -62,6 +65,7 @@ use strings;  ?>
       printf( '<td class="text-center">%s</td>', $dto->parent ? '&nbsp;' : $dto->party);
       printf( '<td class="d-none d-md-table-cell">%s</td>', $dto->phone);
       printf( '<td class="d-none d-lg-table-cell">%s</td>', $dto->address);
+      printf( '<td class="d-none d-xl-table-cell text-center">%s</td>', config::registrations_type_manual == $dto->type ? 'M' : '&nbsp;');
 
       print '</tr>';
 
@@ -91,11 +95,16 @@ use strings;  ?>
         <td class="text-center"><?= $parties ?></td>
         <td class="d-none d-md-table-cell">&nbsp;</td>
         <td class="d-none d-lg-table-cell">&nbsp;</td>
+        <td class="d-none d-xl-table-cell text-center"><?= $manual ?></td>
 
       </tr>
 
       <tr>
-        <td class="text-muted font-italic small" colspan="7"><?= sprintf( 'updated : %s', date( config::$DATETIME_FORMAT)) ?></td>
+        <td class="font-italic small" colspan="8"><?php
+          if ( $manual) printf( '<div>note report contains %s manual addition/s</div>', $manual);
+          printf( '<div class="text-muted">updated : %s</div>', date( config::$DATETIME_FORMAT));
+
+        ?></td>
         <?php if ( config::$CHECKOUT) { ?>
         <td class="d-none d-sm-table-cell">&nbsp;</td>
         <?php } // if ( config::$CHECKOUT) { ?>
@@ -108,7 +117,7 @@ use strings;  ?>
 
 </div>
 <script>
-$(document).ready( () => {
+( _ => $(document).ready( () => {
 	$('#<?= $_table ?>')
 	.on('update-row-numbers', function(e) {
     let tot = 0;
@@ -182,9 +191,9 @@ $(document).ready( () => {
         let _me = $(this);
         let _data = _me.data();
 
-        _brayworth_.hideContexts();
+        _.hideContexts();
 
-        let _context = _brayworth_.context();
+        let _context = _.context();
 
         if ( 'no' == _data.checkout) {
           _context.append( $('<a href="#">checkout</a>').on( 'click', function( e) {
@@ -205,5 +214,5 @@ $(document).ready( () => {
 
   <?php } // if ( currentUser::isAdmin()) ?>
 
-});
+}))( _brayworth_);
 </script>

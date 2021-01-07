@@ -14,18 +14,18 @@ use strings;    ?>
 
 <nav class="nav flex-column">
   <div class="nav-item">
-    <a class="nav-link" href="<?= strings::url( 'events') ?>"><i class="fa fa-calendar"></i>events</a>
+    <a class="nav-link" href="<?= strings::url( 'events') ?>"><i class="bi bi-calendar-event"></i> events</a>
 
   </div>
 
   <?php if ( currentUser::isAdmin()) {  ?>
     <div class="nav-item">
-      <a class="nav-link" href="<?= strings::url( 'users') ?>"><i class="fa fa-users"></i>users</a>
+      <a class="nav-link" href="<?= strings::url( 'users') ?>"><i class="bi bi-people"></i> users</a>
 
     </div>
 
     <div class="nav-item">
-      <a class="nav-link" href="#" id="<?= $_settings = strings::rand() ?>"><i class="fa fa-cog"></i>settings</a>
+      <a class="nav-link" href="#" id="<?= $_settings = strings::rand() ?>"><i class="bi bi-gear"></i> settings</a>
 
     </div>
     <script>
@@ -47,7 +47,7 @@ use strings;    ?>
 
   <?php if ( currentUser::isProgrammer()) {  ?>
     <div class="nav-item">
-      <a class="nav-link" href="<?= strings::url( 'admin/dbdownload') ?>"><i class="fa fa-database"></i>DB Download</a>
+      <a class="nav-link" href="<?= strings::url( 'admin/dbdownload') ?>"><i class="bi bi-hdd-stack"></i> DB Download</a>
 
     </div>
 

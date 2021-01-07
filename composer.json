@@ -1,34 +1,30 @@
 {
-    "name": "bravedave/mvp",
-    "description": "Minimum Viable Product",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Dave Bray",
-            "email": "david@brayworth.com.au"
-        }
-    ],
-    "require": {
-      "bravedave/dvc": "^2.1",
-      "matthiasmullie/scrapbook": "^1.4",
-      "bacon/bacon-qr-code": "^2.0",
-      "bravedave/green": "^1.1"
-    },
-    "autoload": {
-        "psr-4": {
-            "": "application/app",
-            "c19\\": "c19/"
-
-        }
-
-    },
-    "scripts": {
-        "post-update-cmd": [
-            "c19\\postUpdate::upgrade"
-        ]
-
+  "name": "bravedave/mvp",
+  "description": "Minimum Viable Product",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Dave Bray",
+      "email": "david@brayworth.com.au"
     }
-
+  ],
+  "require": {
+    "bravedave/dvc": "*",
+    "bravedave/green": "*",
+    "matthiasmullie/scrapbook": "^1.4",
+    "bacon/bacon-qr-code": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "": "application/app",
+      "c19\\": "c19/"
+    }
+  },
+  "scripts": {
+    "post-update-cmd": [
+      "c19\\postUpdate::upgrade"
+    ]
+  }
 }

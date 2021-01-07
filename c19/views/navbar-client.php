@@ -20,7 +20,7 @@ use dvc;    ?>
       style="margin: -10px 0;" />
     <?= $this->data->title ?>
   </a>
-  <button tyle="button" class="btn btn-bilinga" name="refresh" id="<?= $_uid = strings::rand() ?>"><i class="fa fa-refresh"></i></button>
+  <button tyle="button" class="btn btn-bilinga" name="refresh" id="<?= $_uid = strings::rand() ?>"><i class="bi bi-arrow-repeat"></i></button>
 </nav>
 <script>
 $(document).ready( () => {

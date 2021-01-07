@@ -12,7 +12,7 @@
   <?php
 	while ( $dto = $this->data->openevents->dto()) {  ?>
   <div class="nav-item">
-    <a class="nav-link" href="<?= strings::url('events/registrations/' . $dto->id) ?>"><i class="fa fa-calendar-o"></i><?= $dto->description ?></a>
+    <a class="nav-link" href="<?= strings::url('events/registrations/' . $dto->id) ?>"><i class="bi bi-calendar-event"></i> <?= $dto->description ?></a>
 
   </div>
   <?php

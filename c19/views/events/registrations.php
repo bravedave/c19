@@ -20,7 +20,7 @@ $dto = $this->data->event;  ?>
     <?php if ( currentUser::isAdmin()) {  ?>
       <button class="btn btn-light"
         id="<?= $_uid = strings::rand() ?>">
-        <i class="fa fa-pencil"></i>
+        <i class="bi bi-pencil"></i>
 
       </button>
       <script>
@@ -43,7 +43,7 @@ $dto = $this->data->event;  ?>
 
     <button class="btn btn-light"
       id="<?= $_refresh = strings::rand() ?>">
-      <i class="fa fa-refresh"></i>
+      <i class="bi bi-arrow-repeat"></i>
 
     </button>
 
@@ -70,10 +70,12 @@ $dto = $this->data->event;  ?>
 </div>
 
 <h5 id="<?= $_registrations = strings::rand() ?>heading" class="d-flex">
-  Attendees
-  <div class="spinner-grow spinner-grow-sm ml-auto" role="status">
+  <div class="mr-auto pt-2">Attendees</div>
+  <div class="spinner-grow mx-2" role="status">
     <span class="sr-only">Loading...</span>
   </div>
+  <button class="btn btn-light" id="<?= $_registrations ?>-add"><i class="bi bi-person-plus"></i></button>
+
 </h5>
 
 <div class="row">
@@ -82,94 +84,115 @@ $dto = $this->data->event;  ?>
 </div>
 
 <script>
-$(document).ready( () => {
-  ( _ => {
-    $('#<?= $_registrations ?>').on('get-attendees', function(e) {
-      e.stopPropagation();
+( _ => {
+  let iterant = 0;
+  $('#<?= $_registrations ?>').on('get-attendees', function(e) {
+    e.stopPropagation();
 
-      $('.spinner-grow', '#<?= $_registrations ?>heading').removeClass('d-none');
-      $('#<?= $_refresh ?> > .fa').addClass('fa-spin').prop( 'disabled', true);
-      let url = _.url( '<?= $this->route ?>/attendees/<?= $dto->id ?>');
-      // console.log( url);
+    let _iterant = ++iterant;
 
-      $(this).load( url, data => {
+    $('.spinner-grow', '#<?= $_registrations ?>heading').removeClass('d-none');
+
+    let url = _.url( '<?= $this->route ?>/attendees/<?= $dto->id ?>');
+    let icon = $('#<?= $_refresh ?> > .bi');
+    if ( icon.length > 0) icon.spinner().prop( 'disabled', true);
+
+    // console.log( url);
+
+    $(this).load( url, data => {
+      if ( _iterant == iterant) {
         setTimeout(() => {
           $('#<?= $_registrations ?>').trigger('get-attendees');
+
         }, 10000);
 
-        $('.spinner-grow', '#<?= $_registrations ?>heading').addClass('d-none');
-        $('#<?= $_refresh ?> > .fa').removeClass('fa-spin');
+      }
 
-      });
-
-    })
-    .trigger('get-attendees');
-
-    $('#<?= $_refresh ?>').on( 'click', function( e) {
-      e.stopPropagation();
-      $('#<?= $_registrations ?>').trigger('get-attendees');
+      $('.spinner-grow', '#<?= $_registrations ?>heading').addClass('d-none');
+      if ( icon.length > 0) icon.spinner('off');
 
     });
 
-    $(document).on( 'edit-attendee', ( e, id ) => {
-      _.get.modal( _.url( '<?= $this->route ?>/editRegistration/' + id))
-        .then( modal => modal.on('success', e => $('#<?= $_registrations ?>').trigger('get-attendees')));
+  });
+
+  $('#<?= $_refresh ?>').on( 'click', function( e) {
+    e.stopPropagation();
+    $('#<?= $_registrations ?>').trigger('get-attendees');
+
+  });
+
+  $('#<?= $_registrations ?>-add').on( 'click', function( e) {
+    e.stopPropagation();
+
+    $(document).trigger( 'add-attendee');
+
+  });
+
+  $(document).on( 'add-attendee', ( e, id ) => {
+    _.get.modal( _.url( '<?= $this->route ?>/addRegistration/<?= $dto->id ?>'))
+      .then( modal => modal.on('success', e => $('#<?= $_registrations ?>').trigger('get-attendees')));
+
+  });
+
+  $(document).on( 'edit-attendee', ( e, id ) => {
+    _.get.modal( _.url( '<?= $this->route ?>/editRegistration/' + id))
+      .then( modal => modal.on('success', e => $('#<?= $_registrations ?>').trigger('get-attendees')));
+
+  });
+
+  $(document).on( 'checkout-attendee', ( e, id ) => {
+    // console.log( '<?= $this->route ?>', id);
+    _.post({
+      url : _.url('<?= $this->route ?>'),
+      data : {
+        action : 'checkout-attendee',
+        id : id
+
+      },
+
+    }).then( d => {
+      if ( 'ack' == d.response) {
+        $('#<?= $_registrations ?>').trigger('get-attendees');
+
+      }
+      else {
+        _.growl( d);
+
+      }
 
     });
 
-    $(document).on( 'checkout-attendee', ( e, id ) => {
-      // console.log( '<?= $this->route ?>', id);
-      _.post({
-        url : _.url('<?= $this->route ?>'),
-        data : {
-          action : 'checkout-attendee',
-          id : id
+  });
 
-        },
+  $(document).on( 'checkout-attendees', ( e, ids ) => {
+    // console.log( '<?= $this->route ?>', ids);
+    // return;
 
-      }).then( d => {
-        if ( 'ack' == d.response) {
-          $('#<?= $_registrations ?>').trigger('get-attendees');
+    if ( !ids) return;
 
-        }
-        else {
-          _.growl( d);
+    _.post({
+      url : _.url('<?= $this->route ?>'),
+      data : {
+        action : 'checkout-attendees',
+        ids : ids
 
-        }
+      },
 
-      });
+    }).then( d => {
+      if ( 'ack' == d.response) {
+        $('#<?= $_registrations ?>').trigger('get-attendees');
 
-    });
+      }
+      else {
+        _.growl( d);
 
-    $(document).on( 'checkout-attendees', ( e, ids ) => {
-      // console.log( '<?= $this->route ?>', ids);
-      // return;
-
-      if ( !ids) return;
-
-      _.post({
-        url : _.url('<?= $this->route ?>'),
-        data : {
-          action : 'checkout-attendees',
-          ids : ids
-
-        },
-
-      }).then( d => {
-        if ( 'ack' == d.response) {
-          $('#<?= $_registrations ?>').trigger('get-attendees');
-
-        }
-        else {
-          _.growl( d);
-
-        }
-
-      });
+      }
 
     });
 
-  }) (_brayworth_);
+  });
 
-});
+  $(document).ready( () => $('#<?= $_registrations ?>').trigger('get-attendees'));
+
+})( _brayworth_);
 </script>

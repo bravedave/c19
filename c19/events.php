@@ -20,7 +20,30 @@ class events extends controller {
 	protected function postHandler() {
 		$action = $this->getPost( 'action');
 
-		if ( 'delete' == $action) {
+		if ( 'add-registrant' == $action) {
+      $event = (int)$this->getPost( 'event');
+      if ( $event) {
+
+        $a = [
+          'event' => $event,
+          'name' => $this->getPost('name'),
+          'phone' => $this->getPost( 'phone'),
+          'address' => $this->getPost( 'address'),
+          'type' => config::registrations_type_manual,
+          'uid' => bin2hex( random_bytes( 11)),
+          'created' => \db::dbTimeStamp()
+
+        ];
+
+        $dao = new dao\registrations;
+        $id = $dao->Insert( $a);
+
+				Json::ack( $action);
+
+      } else { Json::nak( $action); }
+
+    }
+		elseif ( 'delete' == $action) {
 			if ( ( $id = (int)$this->getPost('id')) > 0 ) {
 				$dao = new dao\events;
 				$dao->delete( $id);
@@ -160,6 +183,32 @@ class events extends controller {
 		);
 
 	}
+
+  public function addRegistration( $event = 0) {
+    if ( $event = (int)$event) {
+      $dao = new dao\events;
+      if ( $dto = $dao->getByID( $event)) {
+        $this->data = (object)[
+          'event' => $dto,
+          'title' => $this->title = "Add Registrant"
+
+        ];
+
+        $this->load( 'events/add-registrant');
+
+      }
+      else {
+        $this->load( 'events/not-found');
+
+      }
+
+    }
+    else {
+      $this->load( 'events/not-found');
+
+    }
+
+  }
 
 	public function attendees( $id = 0) {
     if ( $id = (int)$id) {

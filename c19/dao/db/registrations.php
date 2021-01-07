@@ -19,6 +19,7 @@ $dbc->defineField( 'phone', 'varchar');
 $dbc->defineField( 'address', 'varchar', 100);
 $dbc->defineField( 'parent', 'bigint');
 $dbc->defineField( 'uid', 'varchar');
+$dbc->defineField( 'type', 'int');
 $dbc->defineField( 'created', 'datetime');
 $dbc->defineField( 'checkout', 'datetime');
 
