@@ -8,7 +8,7 @@
  *
 */  ?>
 <style>
-.nav.flex-column > .nav-item > .nav-link > .fa {
+.nav.flex-column > .nav-item > .nav-link > .bi {
 	margin-left: -1rem; margin-right: 0.25rem; width: 1rem;
 
 }
